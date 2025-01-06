@@ -8,14 +8,12 @@
     <form [formGroup]="loginForm" class="d-flex flex-column">
       <app-input
         label="CPF"
-        [required]="true"
         mask="000.000.000-00"
         [control]="$any(loginForm).controls['document']"
       ></app-input>
       <app-input
         label="Senha"
         type="password"
-        [required]="true"
         [control]="$any(loginForm).controls['password']"
       ></app-input>
       <p class="error-message" *ngIf="errorMessage$ | async as error">

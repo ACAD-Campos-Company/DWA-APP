@@ -1,8 +1,12 @@
 <button
-  class="w-100"
-  [ngClass]="buttonClass"
+  class="w-100 d-flex"
+  [ngClass]="[
+    addIcon ? 'justify-content-between' : 'justify-content-center',
+    buttonClass || ''
+  ]"
   (click)="onClick()"
   [disabled]="disabled"
 >
   {{ label }}
+  <img *ngIf="addIcon" src="assets/icons/plus-circle.svg" />
 </button>

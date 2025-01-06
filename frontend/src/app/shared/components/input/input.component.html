@@ -1,6 +1,7 @@
 <div class="form-group">
   <label *ngIf="label">{{ label }}</label>
-  <div>
+  <div class="input-container">
+    <ng-content select="[icon]" #content></ng-content>
     <input
       class="w-100"
       [placeholder]="placeholder"
@@ -47,7 +48,7 @@
     </option>
   </select>
 
-  <p *ngIf="control.errors && control.touched">
+  <p *ngIf="control.errors && control.touched && control.invalid">
     {{ control.errors | onlyOneError }}
   </p>
 </div>

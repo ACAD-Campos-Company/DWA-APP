@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, concatMap, finalize, Observable, of, tap } from 'rxjs';
 
 @Injectable()
-
 export class LoadingService {
 
   private loadingSubject = new BehaviorSubject<boolean>(false);

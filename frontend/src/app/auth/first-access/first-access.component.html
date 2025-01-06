@@ -11,12 +11,12 @@
   <span class="text-left">Preencha seus dados para finalizar seu cadastro</span>
 
   <div class="d-flex flex-column justify-content-between w-100 h-100">
-    <form [formGroup]="firstLoginForm" class="d-flex flex-column gap-4">
+    <form [formGroup]="firstAccessForm" class="d-flex flex-column">
       <app-input
         label="Como quer ser chamado?"
         [required]="true"
-        placeholder="exemplo: paulo"
-        [control]="$any(firstLoginForm).controls['name']"
+        placeholder="exemplo: Paulo"
+        [control]="$any(firstAccessForm).controls['username']"
       ></app-input>
 
       <app-input
@@ -24,44 +24,40 @@
         [required]="true"
         placeholder="(12) 98765-4321"
         mask="(00) 00000-0000"
-        [control]="$any(firstLoginForm).controls['telephone']"
+        [control]="$any(firstAccessForm).controls['telephone']"
       ></app-input>
 
       <app-input
         label="Seu melhor e-mail (opcional)"
         [required]="false"
         placeholder="paulo@email.com.br"
-        [control]="$any(firstLoginForm).controls['email']"
+        [control]="$any(firstAccessForm).controls['email']"
       ></app-input>
 
       <app-input
         label="Senha"
         [required]="true"
         placeholder="********"
+        [control]="$any(firstAccessForm).controls['password']"
         type="password"
-        [control]="$any(firstLoginForm).controls['password']"
       ></app-input>
 
       <app-input
         label="Confirme sua senha"
         [required]="true"
         placeholder="********"
+        [control]="$any(firstAccessForm).controls['password_confirmation']"
         type="password"
-        [control]="$any(firstLoginForm).controls['password_confirmation']"
       ></app-input>
-    </form>
-    
-    <p class="error-message" *ngIf="errorMessage$ | async as errorMessage">
-      {{ errorMessage }}
-    </p>
-    <p *ngIf="successMessage$ | async as successMessage" class="sucess-message">
-      {{ successMessage }}
-    </p>
 
-    <span class="text-left" id="policy-link"
-      >Ao continuar você aceita nosso <a>Termos de Uso</a> e
-      <a>Política de Privacidade.</a></span
-    >
+      <p class="error-message" *ngIf="errorMessage$ | async as error">
+        {{ error }}
+      </p>
+      <span class="text-left" id="policy-link"
+        >Ao continuar você aceita nosso <a>Termos de Uso</a> e
+        <a>Política de Privacidade.</a></span
+      >
+    </form>
     <div>
       <app-button (clicked)="onSubmit()"></app-button>
     </div>

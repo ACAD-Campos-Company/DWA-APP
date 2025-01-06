@@ -11,16 +11,19 @@ export class UserService {
 
   constructor(private http: Http) { }
 
-  updateUser(
-    payload: { password: string; confirm_password: string },
-    token: string,
-    id: string
-  ): Observable<any> {
-    const headers = new HttpHeaders({
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token') || '';
+    return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     });
+  }
 
+  updateUser(
+    payload: { password: string; confirm_password: string },
+    id: string
+  ): Observable<any> {
+    const headers = this.getHeaders();
     return this.http.put(`${this.routeLogin}/${id}`, payload, { headers });
   }
 }

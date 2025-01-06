@@ -1,0 +1,39 @@
+  .card-container {
+
+    &.card-large {
+      width: 100%;
+    }
+
+    &.card-small {
+      width: 130px;
+    }
+
+    .information {
+      padding: 12px;
+      border: 1px solid #4A4A4A;
+      border-top: 0px;
+      border-radius: 0px 0px 20px 20px;
+
+      h2,
+      p {
+        color: white;
+      }
+
+      h2 {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 10px;
+        font-family: "League Spartan", sans-serif;
+        margin-bottom: 0;
+        font-weight: 100;
+      }
+
+      img {
+        width: 8px;
+        margin-right: 2px;
+      }
+    }
+  }

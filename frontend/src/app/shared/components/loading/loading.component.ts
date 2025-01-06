@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoadingService } from '../../services/loading.service';
 import { CommonModule } from '@angular/common';
 

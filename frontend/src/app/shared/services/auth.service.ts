@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Http } from './http.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthenticateLogin, ForgotPasswordRes } from '../models/authenticate';
 import { FormGroup } from '@angular/forms';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-  private routeLogin: string = 'login';
+  private routeLogin: string = 'auth/login';
 
-  private routeResetPasswordStep1: string = 'forgot-password-step1';
-  private routeResetPasswordStep2: string = 'forgot-password-step2';
-  private routeResetLastStep: string = 'reset-password';
+  private routeResetPasswordStep1: string = 'auth/forgot-password-step1';
+  private routeResetPasswordStep2: string = 'auth/forgot-password-step2';
+  private routeResetLastStep: string = 'auth/reset-password';
+
+  private authStateSubject = new BehaviorSubject<boolean>(false);
+  authState$ = this.authStateSubject.asObservable();
 
   constructor(private http: Http) { }
 
@@ -33,5 +38,13 @@ export class AuthService {
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     return !!token;
+  }
+
+  login(): void {
+    this.authStateSubject.next(true);
+  }
+
+  logout(): void {
+    this.authStateSubject.next(false);
   }
 }

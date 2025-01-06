@@ -1,0 +1,9 @@
+<div class="header d-flex align-items-center flex-column w-100">
+  <div class="d-flex w-100 justify-content-start mb-4">
+    <a (click)="goBack()" class="back-button">
+      <img src="assets/icons/arrow-back.svg" />
+    </a>
+    <h1 class="header-title">{{ title }}</h1>
+  </div>
+  <ng-content></ng-content>
+</div>

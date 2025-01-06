@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   DomSanitizer,
@@ -168,7 +168,7 @@ export class Http {
    * @param {{}} url URL to be accessed
    *
    */
-  public delete(url: string): Observable<boolean> {
+  public delete(url: string, options?: { headers?: HttpHeaders }): Observable<boolean> {
     const _safeResourceUrl: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(
       this.environment + url
     );

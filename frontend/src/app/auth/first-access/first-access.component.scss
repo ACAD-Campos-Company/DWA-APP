@@ -1,38 +1,38 @@
 .container-first-login {
-    h1,
-    p {
-      font-family: "League Spartan", sans-serif;
-      color: white;
-    }
-    h1{
-        margin-bottom: 65px;
-    }
-    a{
-      text-decoration: underline;
-      color: #F5A623;
-    }
-    span{
-        color: white;
-        font-size: 15px;
-        line-height: 24px;
-        font-weight: 400;
-        text-align: center;
-        margin-bottom: 30px;
-    }
 
-    #policy-link{
-      font-size: 12px;
-      margin-bottom: 0px;    }
-
-    .error-message {
-      color: red;
-    }
-
-    .backButton{
-        width: 22px;
-        height: 22px;
-        position: absolute;
-        left: 10%;
-    }
+  h1,
+  p {
+    font-family: "League Spartan", sans-serif;
   }
-  
+
+  h1 {
+    margin-bottom: 65px;
+    color: white;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #F5A623;
+  }
+
+  span {
+    color: white;
+    font-size: 15px;
+    line-height: 24px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  #policy-link {
+    font-size: 12px;
+    margin-bottom: 0px;
+  }
+
+  .backButton {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 10%;
+  }
+}
