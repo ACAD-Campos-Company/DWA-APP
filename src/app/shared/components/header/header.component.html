@@ -3,11 +3,15 @@
     class="header-home d-flex align-items-center justify-content-between mb-3"
   >
     <div class="header-left">
-      <h1 class="text-white font-family-poppins fw-bold">Oi, {{ currentUser.username }}!</h1>
+      <h1 class="text-white font-family-poppins fw-bold">
+        Oi, {{ currentUser.username }}!
+      </h1>
       <p class="subtitle mb-0 text-white" *ngIf="!isAdmin">
         Persistência hoje, resultados amanhã.
       </p>
-      <p class="subtitle mb-0 text-white" *ngIf="isAdmin">{{ currentUser.roles[0].name }}</p>
+      <p class="subtitle mb-0 text-white" *ngIf="isAdmin">
+        {{ currentUser.roles[0].name }}
+      </p>
 
       <!-- <div class="d-flex align-items-center gap-3">
         <div class="points-item d-flex align-items-center gap-2">
@@ -32,8 +36,14 @@
         </div>
       </div> -->
     </div>
-    <div class="header-right">
-      <i class="fas fa-solid fa-user fs-5" routerLink="/menu"></i>
+    <div class="header-right d-flex align-items-center gap-3">
+      <div class="notification-bell position-relative">
+        <i class="fas fa-bell fs-5" routerLink="/notifications"></i>
+        <span class="notification-badge" *ngIf="currentCount > 0">
+          {{ currentCount > 99 ? '99+' : currentCount }}
+        </span>
+      </div>
+      <i class="fas fa-user fs-5" routerLink="/menu"></i>
     </div>
   </header>
 </ng-container>

@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
 
   constructor(private pushNotificationService: PushNotificationService) {}
 
-  async ngOnInit() {
-    await this.pushNotificationService.initPush();
+  ngOnInit() {
+    this.pushNotificationService.initPush();
+    this.pushNotificationService.loadSavedNotifications();
   }
 }

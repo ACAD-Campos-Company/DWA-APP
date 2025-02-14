@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { map, Observable, take, combineLatest } from 'rxjs';
 import { User } from '../../shared/models/users.model';
@@ -18,6 +18,7 @@ import { Challenge } from '../../shared/models/challenge.model';
 import { ChallengesPanelComponent } from '../../shared/components/challenges-panel/challenges-panel.component';
 import { TrainingViewEntityService } from '../../store/training-view/training-view-entity.service';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import { PushNotificationService } from '../../shared/services/push-notification.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -34,6 +35,7 @@ import { HeaderComponent } from '../../shared/components/header/header.component
   providers: [LoadingService],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
   private readonly trainingEntityService = inject(TrainingEntityService);
@@ -41,6 +43,9 @@ export class HomeComponent {
   private readonly userEntityService = inject(UserEntityService);
   private readonly challengeEntityService = inject(ChallengeEntityService);
   private readonly trainingViewEntityService = inject(TrainingViewEntityService);
+  private readonly pushNotificationService = inject(PushNotificationService);
+
+  notificationCount$ = this.pushNotificationService.unreadCount$;
 
   challenges$: Observable<Challenge[]> = this.challengeEntityService.entities$;
 
