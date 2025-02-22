@@ -1,15 +1,27 @@
-<div class="challenge-card mb-2 p-3">
-  <div class="difficulty-container px-2 py-1 mb-2">
-    <p class="text-center m-0">{{ "⭐".repeat(+challenge.difficulty) }}</p>
-  </div>
-  <h3 class="text-start mb-2">{{ challenge.name }}</h3>
-  <p class="text-start mb-3">{{ challenge.description }}</p>
+<div class="challenge-container mb-4">
+  <app-challenge-card [challenge]="challenge"></app-challenge-card>
 
-  <app-button
-    *ngIf="!isAdmin"
-    [label]="completed ? 'Concluído' : 'Concluir'"
-    (clicked)="completeChallengeClick(challenge.id)"
-    [buttonClass]="completed ? 'btn-success' : 'btn-secondary'"
-    [disabled]="completed"
-  ></app-button>
+  <div class="challenge-action p-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <p class="mb-0 font-family-poppins text-white fw-semibold">
+        DESAFIO -
+        {{
+          challenge.difficulty === "1"
+            ? "INICIANTE"
+            : challenge.difficulty === "2"
+            ? "INTERMEDIÁRIO"
+            : "AVANÇADO"
+        }}
+      </p>
+      <div class="d-flex align-items-center justify-content-end">
+        <app-button
+          *ngIf="!isAdmin"
+          [label]="completed ? 'Concluído' : 'Concluir'"
+          (clicked)="completeChallengeClick(challenge.id)"
+          buttonClass="btn-success"
+          [disabled]="completed"
+        ></app-button>
+      </div>
+    </div>
+  </div>
 </div>

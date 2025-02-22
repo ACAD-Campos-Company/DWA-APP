@@ -1,25 +1,43 @@
 .challenge-card {
-    background-color: #fff;
-    border-radius: 12px;
-  
-    p, h3 {
-      font-family: "Poppins", sans-serif;
-    }
-  
-    h3 {
-      font-size: 16px;
-      font-weight: 600;
-    }
-  
-    p {
-      font-size: 14px;
-      font-weight: 300;
-    }
-  
-    .difficulty-container {
-      width: 60px;
-      background-color: rgba(252, 179, 81, 0.5);
-      border-radius: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+
+  p,
+  h3 {
+    font-family: "Poppins", sans-serif;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .difficulty-container {
+    width: 60px;
+    background-color: rgba(252, 179, 81, 0.5);
+    border-radius: 24px;
+  }
+}
+
+.challenge-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  ::ng-deep app-challenge-card {
+    .challenge-card {
+      border-radius: 20px 20px 0 0;
+      margin-bottom: 0;
     }
   }
-  
+
+  .challenge-action {
+    background-color: #0f0f0f;
+    border-radius: 0 0 20px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: none;
+  }
+}

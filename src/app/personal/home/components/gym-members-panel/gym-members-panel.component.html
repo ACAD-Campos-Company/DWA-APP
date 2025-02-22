@@ -10,7 +10,7 @@
     class="costumers-panel__grid p-0"
     [config]="swiperConfig"
     [slidesPerView]="3"
-    [spaceBetween]="15"
+    [spaceBetween]="60"
   >
     <swiper-slide *ngFor="let gymMember of filteredGymMembers$ | async">
       <app-card

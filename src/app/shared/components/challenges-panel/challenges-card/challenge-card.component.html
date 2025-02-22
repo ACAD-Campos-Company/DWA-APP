@@ -1,7 +1,9 @@
 <div
-  class="challenge-card bg-white d-grid"
+  class="challenge-card d-grid"
   [ngClass]="{
-    'difficulty-advanced': challenge.difficulty === '3'
+    'difficulty-beginner-background': challenge.difficulty === '1',
+    'difficulty-intermediate-background': challenge.difficulty === '2',
+    'difficulty-advanced-background': challenge.difficulty === '3'
   }"
 >
   <div class="d-flex flex-column justify-content-around p-3">
@@ -10,7 +12,7 @@
       [ngClass]="{
         'difficulty-beginner-tag': challenge.difficulty === '1',
         'difficulty-intermediate-tag': challenge.difficulty === '2',
-        'difficulty-advanced-tag': challenge.difficulty === '3'
+        'difficulty-background-tag': challenge.difficulty === '3'
       }"
     >
       <p class="difficulty text-white text-center mb-0 fw-bold">
@@ -36,8 +38,10 @@
       class="w-100 h-100"
       [src]="
         challenge.difficulty === '3'
-          ? 'assets/backgrounds/challenge-hard-image.png'
-          : 'assets/backgrounds/challenge-default-image.svg'
+          ? 'assets/backgrounds/challenge-hard-background.png'
+          : challenge.difficulty === '2'
+          ? 'assets/backgrounds/challenge-intermediate-background.png'
+          : 'assets/backgrounds/challenge-beginner-background.png'
       "
       [alt]="challenge.name"
     />
