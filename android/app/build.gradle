@@ -5,6 +5,17 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
+
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    kotlinOptions {
+      jvmTarget = '17'
+      apiVersion = '2.1'
+      languageVersion = '2.1'
+    }
+  }
     namespace "com.gcptecnologia.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -56,9 +67,14 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-perf'
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'com.google.android.gms:play-services-base:18.3.0'
+    implementation 'com.google.android.gms:play-services-basement:18.3.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 }
 
 apply from: 'capacitor.build.gradle'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 try {
     def servicesJSON = file('google-services.json')

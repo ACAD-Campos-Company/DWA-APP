@@ -18,6 +18,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.pushNotificationService.initPush();
-    this.pushNotificationService.loadSavedNotifications();
   }
 }

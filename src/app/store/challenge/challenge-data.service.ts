@@ -34,7 +34,7 @@ export class ChallengeDataService extends DefaultDataService<Challenge> {
 
   completeChallenge(payload: { challenge_id: number, user_id: number }): Observable<Challenge> {
     return this.http.post<completeChallengeData>(this.routes.userChallenges, payload).pipe(
-      map((response: completeChallengeData) => response.data.challenge)
+      map((response: completeChallengeData) => response.data)
     );
   }
 } 

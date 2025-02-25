@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">dwa-app</string>
-    <string name="title_activity_main">dwa-app</string>
+<resources> 
+    <string name="app_name">DWAPP</string>
+    <string name="title_activity_main">DWAPP</string>
     <string name="package_name">com.gcptecnologia.app</string>
     <string name="custom_url_scheme">com.gcptecnologia.app</string>
 </resources>

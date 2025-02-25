@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { User } from '../../models/users.model';
 import { PushNotificationService } from '../../services/push-notification.service';
-import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -13,31 +12,28 @@ import { Observable, tap } from 'rxjs';
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   @Input() title: string = '';
   @Input() hasHome: boolean = false;
   @Input() routeNameBack: string | null = null;
   @Input() homeMode: boolean = false;
   @Input() currentUser: User = {} as User;
   @Input() isAdmin: boolean = false;
-  @Input() routeName: string = this.isAdmin ? '/personal/home' : '/members/home';
+  @Input() routeName: string = '';
+
+  private readonly location = inject(Location);
+  private readonly pushNotificationService = inject(PushNotificationService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   currentCount: number = 0;
 
-  constructor(
-    private location: Location,
-    private pushNotificationService: PushNotificationService,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.pushNotificationService.unreadCount$.subscribe(count => {
-      console.log('Subscribe - Novo contador:', count);
-      this.currentCount = count;
-      this.cdr.detectChanges();
-    });
-  }
+  constructor() {
+    this.routeName = this.isAdmin ? '/personal/home' : '/members/home';
 
-  ngOnInit() {
-    console.log('Header Component initialized');
+    this.pushNotificationService.unreadCount$.subscribe(count => {
+      this.currentCount = count;
+      this.cdr.markForCheck();
+    });
   }
 
   goBack(): void {

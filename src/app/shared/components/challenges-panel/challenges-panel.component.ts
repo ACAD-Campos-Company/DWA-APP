@@ -21,7 +21,7 @@ export class ChallengesPanelComponent {
   private readonly challengeEntityService = inject(ChallengeEntityService);
   challenges$: Observable<Challenge[]> = this.challengeEntityService.entities$;
 
-  swiperConfig = {
+  swiperConfig: SwiperOptions = {
     slidesPerView: 1,
     pagination: true
   };

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { HeaderComponent } from '../../components/header/header.component';
@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 export class ChallengesViewComponent implements OnInit {
 
   private readonly challengesService = inject(ChallengeEntityService);
+
   challenges$: Observable<Challenge[]> = new Observable();
   completedChallenges$: Observable<Challenge[]> = new Observable();
 
@@ -32,19 +33,19 @@ export class ChallengesViewComponent implements OnInit {
   }
 
   private initializeChallenges(): void {
-    this.challenges$ = this.challengesService.entities$.pipe(
+    this.challenges$ = this.challengesService.challenges$.pipe(
       map(challenges => challenges.filter(challenge => !challenge.completed))
     );
 
-    this.completedChallenges$ = this.challengesService.entities$.pipe(
+    this.completedChallenges$ = this.challengesService.challenges$.pipe(
       map(challenges => challenges.filter(challenge => challenge.completed))
     );
   }
 
   public completeChallenge(challengeId: number): void {
     this.challengesService.completeChallenge({ challenge_id: challengeId, user_id: this.userID }).pipe(
-      tap(async () => {
-        await Swal.fire({
+      tap(() => {
+        Swal.fire({
           title: 'Parabéns!',
           text: 'Desafio concluído com sucesso, continue assim!',
           icon: 'success',
@@ -56,7 +57,7 @@ export class ChallengesViewComponent implements OnInit {
         });
       }),
       catchError((error) => {
-        console.error('Error updating user:', error);
+        console.error('Error updating challenge:', error);
         return of(null);
       })
     ).subscribe();
