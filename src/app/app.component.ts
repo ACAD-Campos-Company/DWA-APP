@@ -11,12 +11,6 @@ import { PushNotificationService } from './shared/services/push-notification.ser
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'DWAPP';
-
-  constructor(private pushNotificationService: PushNotificationService) {}
-
-  ngOnInit() {
-    this.pushNotificationService.initPush();
-  }
 }

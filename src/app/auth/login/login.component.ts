@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthEntityService } from '../store/auth-entity.service';
+import { PushNotificationService } from '../../shared/services/push-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,13 @@ export class LoginComponent implements OnInit {
   private readonly authEntityService = inject(AuthEntityService);
   private readonly router = inject(Router);
   private readonly loadingService = inject(LoadingService);
+  private readonly pushNotificationService = inject(PushNotificationService);
 
   private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
   errorMessage$ = this.errorMessageSubject.asObservable();
   loginForm: FormGroup = new FormGroup({});
 
   constructor() { }
-
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       document: ['', [Validators.required]],
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.router.navigateByUrl('/on-boarding');
           }
+          this.pushNotificationService.initPush();
         },
         error: (err) => {
           this.errorMessageSubject.next(err.error.message || "Erro inesperado");

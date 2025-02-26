@@ -32,7 +32,7 @@ export class HeaderComponent {
 
     this.pushNotificationService.unreadCount$.subscribe(count => {
       this.currentCount = count;
-      this.cdr.markForCheck();
+      this.cdr.detectChanges();
     });
   }
 

@@ -13,7 +13,9 @@ export interface User {
   profile_image?: string,
   active: number,
   points?: number,
-  last_login?: string
+  last_login?: string,
+  device_token?: string,
+  device_os?: string,
   roles: Roles[]
 }
 export interface Roles {
