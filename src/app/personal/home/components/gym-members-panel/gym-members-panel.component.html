@@ -6,13 +6,14 @@
     </div>
   </header>
 
-  <swiper-container
-    class="costumers-panel__grid p-0"
-    [config]="swiperConfig"
-    [slidesPerView]="3"
-    [spaceBetween]="60"
+  <ng-container *ngIf="(filteredGymMembers$ | async)!.length > 0; else noGymMembers">
+    <swiper-container
+      class="costumers-panel__grid p-0"
+      [config]="swiperConfig"
+      [slidesPerView]="3"
+      [spaceBetween]="60"
   >
-    <swiper-slide *ngFor="let gymMember of filteredGymMembers$ | async">
+    <swiper-slide *ngFor="let gymMember of (filteredGymMembers$ | async)!">
       <app-card
         [title]="gymMember.username"
         [subtitle]="gymMember.telephone || 'Não informado'"
@@ -20,7 +21,11 @@
         imageSrc="assets/images/default-user-profile.png"
         size="small"
         [routerLink]="['/personal/gym-members', gymMember.id]"
-      ></app-card>
-    </swiper-slide>
-  </swiper-container>
+        ></app-card>
+      </swiper-slide>
+    </swiper-container>
+  </ng-container>
+  <ng-template #noGymMembers>
+    <p class="text-white font-family-poppins">Nenhum usuário cadastrado</p>
+  </ng-template>
 </section>

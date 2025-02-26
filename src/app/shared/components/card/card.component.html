@@ -8,14 +8,14 @@
     <div
       class="d-flex mt-3 align-items-center"
       [ngClass]="{
-        'justify-content-between': duration,
-        'justify-content-start': !duration
+        'justify-content-between': duration || validity,
+        'justify-content-start': !duration && !validity
       }"
     >
       <p *ngIf="validity" class="text-center text-white font-family-poppins mb-0 fw-lighter">Validade: {{ validity }}</p>
       <div class="d-flex gap-1" *ngIf="duration">
         <i class="fas fa-solid fa-clock"></i>
-        <p class="text-center text-white font-family-poppins mb-0 fw-lighter">
+        <p *ngIf="duration" class="text-center text-white font-family-poppins mb-0 fw-lighter">
           {{ duration }}
         </p>
       </div>

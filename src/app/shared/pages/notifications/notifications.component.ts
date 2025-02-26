@@ -30,7 +30,6 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {}
 
   markAsRead(id: string) {
-    console.log('Marcando como lida:', id);
     this.pushNotificationService.markAsRead(id);
   }
 }

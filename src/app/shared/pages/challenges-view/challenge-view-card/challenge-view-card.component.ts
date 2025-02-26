@@ -20,10 +20,8 @@ export class ChallengeViewCardComponent implements OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (changes['challenge']) {
       if (this.challenge?.changes?.completed === true) {
-        console.log(this.challenge);
         this.cdr.markForCheck();
       }
     }

@@ -6,20 +6,26 @@
     </div>
   </header>
 
-  <swiper-container
-    class="challenges-panel__slider"
-    [config]="swiperConfig"
-    [slidesPerView]="1"
-    style="--swiper-pagination-color: #ff4800;"
-    pagination="true"
-    pagination-clickable="true"
-    pagination-dynamic-bullets="true"
-  >
-    <swiper-slide *ngFor="let challenge of challenges$ | async">
-      <app-challenge-card
-        [challenge]="challenge"
-        routerLink="/general/challenges"
-      ></app-challenge-card>
-    </swiper-slide>
-  </swiper-container>
+  <ng-container *ngIf="(challenges$ | async)!.length > 0 else noChallenges">
+    <swiper-container
+      class="challenges-panel__slider"
+      [config]="swiperConfig"
+      [slidesPerView]="1"
+      style="--swiper-pagination-color: #ff4800"
+      pagination="true"
+      pagination-clickable="true"
+      pagination-dynamic-bullets="true"
+    >
+      <swiper-slide *ngFor="let challenge of (challenges$ | async)!">
+        <app-challenge-card
+          [challenge]="challenge"
+          routerLink="/general/challenges"
+        ></app-challenge-card>
+      </swiper-slide>
+    </swiper-container>
+  </ng-container>
+
+  <ng-template #noChallenges>
+    <p class="text-white font-family-poppins">Nenhum desafio encontrado</p>
+  </ng-template>
 </section>

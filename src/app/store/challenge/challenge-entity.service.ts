@@ -46,14 +46,14 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
   completeChallenge(payload: { challenge_id: number, user_id: number }): Observable<Challenge> {
     return this.challengeDataService.completeChallenge(payload).pipe(
       tap((response: Challenge) => {
-        const update = { id: response.id!, changes: response };
+        const update = { id: response.challenge_id, changes: response };
 
         super.updateOneInCache(update);
         const currentChallenges = this.challengesSubject.getValue();
-        if (currentChallenges.some(ch => ch.id === response.id)) {
+        if (currentChallenges.some(ch => ch.id === response.challenge_id)) {
           this.challengesSubject.next(
             currentChallenges.map(ch =>
-              ch.id === response.id ? response : ch
+              ch.id === response.challenge_id ? response : ch
             )
           );
         }

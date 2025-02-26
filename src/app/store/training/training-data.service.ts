@@ -26,9 +26,7 @@ export class TrainingDataService extends DefaultDataService<Training> {
 
   override getAll(): Observable<Training[]> {
     return this.http.get<TrainingData>(this.routes.trainings).pipe(
-      map((response: TrainingData) => {
-        return response.data.trainings
-      })
+      map((response: TrainingData) => response.data.trainings)
     );
   }
 

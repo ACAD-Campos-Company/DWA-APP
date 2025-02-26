@@ -8,31 +8,51 @@
         *ngIf="showTodayTraining"
         class="fas fa-solid fa-fire-flame-curved"
       ></i>
-      <h1 class="mb-2 font-family-poppins fw-semibold font-family-poppins text-white">{{ title }}</h1>
+      <h1
+        class="mb-2 font-family-poppins fw-semibold font-family-poppins text-white"
+      >
+        {{ title }}
+      </h1>
     </div>
-    <p class="font-family-poppins fw-semibold" *ngIf="isPersonal" routerLink="/personal/trainings">
+    <p
+      class="font-family-poppins fw-semibold"
+      *ngIf="isPersonal"
+      routerLink="/personal/trainings"
+    >
       Ver todos
       <i class="fas fa-solid fa-caret-right"></i>
     </p>
   </div>
 
   <div class="d-flex flex-column gap-4">
-    <ng-container *ngFor="let training of trainings">
-      <app-card
-        *ngIf="showTodayTraining ? training.todayTraining : true"
-        [title]="training.name.toLocaleUpperCase()"
-        [duration]="
-          formatDuration(training.last_duration || training.duration.toString())
-        "
-        imageSrc="assets/images/default-training-profile.png"
-        size="large"
-        [routerLink]="[
-          '/general/training',
-          training.origin_trainingID || training.id
-        ]"
-        [showButton]="showButton"
-        [validity]="!isPersonal ? formatDate(training.expire_date) : undefined"
-      ></app-card>
+    <ng-container *ngIf="trainings.length > 0; else noTrainings">
+      <ng-container *ngFor="let training of trainings">
+        <app-card
+          *ngIf="showTodayTraining ? training.todayTraining : true"
+          [title]="training.name.toLocaleUpperCase() || ''"
+          [duration]="
+            training.last_duration || training.duration
+              ? formatDuration(
+                  training.last_duration || training.duration.toString()
+                )
+              : ''
+          "
+          imageSrc="assets/images/default-training-profile.png"
+          size="large"
+          [routerLink]="[
+            '/general/training',
+            training.origin_trainingID || training.id
+          ]"
+          [showButton]="showButton"
+          [validity]="
+            !isPersonal ? formatDate(training.expire_date) : undefined
+          "
+        ></app-card>
+      </ng-container>
     </ng-container>
+
+    <ng-template #noTrainings>
+      <p class="text-white font-family-poppins">Nenhum treino encontrado</p>
+    </ng-template>
   </div>
 </div>
