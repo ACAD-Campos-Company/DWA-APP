@@ -47,7 +47,9 @@ export class LoginComponent implements OnInit {
       const auth$ = this.authEntityService.authenticate({ ...formValues, fromApp: true });
 
       this.loadingService.showLoaderUntilCompleted(auth$).subscribe({
-        next: ({ data: { user } }) => {
+        next: ({ data: { user, token } }) => {
+          this.authEntityService.setTokenFromStorage(token, user);
+          
           if (!user.last_login) {
             this.router.navigateByUrl(`/first-access/${user.id}`);
           } else {

@@ -38,10 +38,27 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
     ) {
         super('Auth', serviceElementsFactory);
         this.authState$.subscribe();
+        
+        const storedToken = localStorage.getItem('authToken');
+        const storedUser = localStorage.getItem('currentUser');
+        
+        if (storedToken && storedUser) {
+            const user = JSON.parse(storedUser);
+            this.setTokenFromStorage(storedToken, user);
+        }
     }
 
     getToken(): string {
         return this.tokenSubject.getValue();
+    }
+    
+    setTokenFromStorage(token: string, user?: User): void {
+        this.tokenSubject.next(token);
+        
+        if (user) {
+            this.addOneToCache({ user, token });
+            this.userEntityService.setCurrentUser(user);
+        }
     }
 
     authenticate(credentials: { document: string; password: string, fromApp: boolean }): Observable<AuthenticateLogin> {
@@ -50,7 +67,8 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
                 if (response.data.token) {
                     this.addOneToCache({ user: response.data.user, token: response.data.token });
                     this.tokenSubject.next(response.data.token);
-                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('authToken', response.data.token);
+                    localStorage.setItem('currentUser', JSON.stringify(response.data.user));
                     this.userEntityService.setCurrentUser(response.data.user);
                 }
             })
@@ -61,7 +79,9 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
         return this.authDataService.logout().pipe(
             tap(() => {
                 this.tokenSubject.next('');
-                localStorage.removeItem('token');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isLoggedIn');
                 this.clearCache();
                 this.userEntityService.clearUserState();
                 this.exerciseEntityService.clearCache();
