@@ -38,7 +38,7 @@
           class="form-check-input"
           type="checkbox"
           role="switch"
-          [checked]="isCompleted || isTrainingCompleted"
+          [checked]="isExerciseCompleted || isTrainingCompleted"
           (click)="onToggleExercise($event)"
           [disabled]="
             isTrainingCompleted ||
@@ -47,7 +47,7 @@
             isOtherTrainingActive
           "
           [ngClass]="{
-            'bg-success border-success': isCompleted || isTrainingCompleted,
+            'bg-success border-success': isExerciseCompleted || isTrainingCompleted,
             disabled:
               !isTrainingStarted || isTrainingPaused || isOtherTrainingActive
           }"

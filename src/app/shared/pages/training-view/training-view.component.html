@@ -103,7 +103,7 @@
           [isTrainingPaused]="(isPaused$ | async) === true"
           [isTrainingCompleted]="training.completed"
           [isOtherTrainingActive]="(isOtherTrainingActive$ | async) === true"
-          [isCompleted]="(isCompleted(exercise.id) | async) === true"
+          [isExerciseCompleted]="(isCompleted(exercise.id) | async) === true"
           (exerciseToggled)="onExerciseCompleted($event)"
           (exerciseClicked)="onExerciseClick($event)"
         ></app-user-card-exercise>

@@ -14,7 +14,7 @@ export class UserCardExerciseComponent {
   @Input() isTrainingStarted: boolean = false;
   @Input() isTrainingPaused: boolean = false;
   @Input() isTrainingCompleted: boolean = false;
-  @Input() isCompleted: boolean = false;
+  @Input() isExerciseCompleted: boolean = false;
   @Input() isOtherTrainingActive: boolean = false;
   @Input() isAdmin: boolean = false;
   @Output() exerciseClicked = new EventEmitter<Exercise>();
