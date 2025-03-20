@@ -23,7 +23,6 @@ export class GymMemberViewComponent {
   private readonly router = inject(Router);
   private readonly userEntityService = inject(UserEntityService);
   private readonly trainingViewEntityService = inject(TrainingViewEntityService);
-  private readonly loadingService = inject(LoadingService);
 
   private userId: number = +this.route.snapshot.params['id'];
 
@@ -37,18 +36,14 @@ export class GymMemberViewComponent {
     map(user => user!)
   );
 
-  trainings$: Observable<Training[]> = this.trainingViewEntityService.trainingView$.pipe(
-    take(1),
-    switchMap(trainings => {
-      this.loadingService.loadingOn();
-      if (trainings && trainings.length > 0 && trainings[0].user_id === this.userId) {
-        this.loadingService.loadingOff();
-        return of(trainings);
-      }
-      return this.trainingViewEntityService.getTrainingByUserId(this.userId).pipe(take(1), finalize(() => this.loadingService.loadingOff()));
-    }),
-    shareReplay(1)
-  );
+  trainings$ = this.trainingViewEntityService.trainingView$;
 
   formatDuration = formatDuration;
+
+  getDuration(training: Training): string {
+    return this.formatDuration(
+      training.last_duration || 
+      (training.duration ? training.duration.toString() : '00:00')
+    );
+  }
 }

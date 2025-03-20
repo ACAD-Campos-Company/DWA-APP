@@ -1,9 +1,13 @@
 <section class="challenges-panel">
-  <header class="challenges-panel__header mb-2">
+  <header class="challenges-panel__header mb-2 d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-2">
       <i class="fas fa-trophy"></i>
       <h3 class="font-family-poppins fw-semibold text-white">DESAFIOS</h3>
     </div>
+    <p class="font-family-poppins fw-semibold mb-0" routerLink="/general/challenges" *ngIf="(challenges$ | async)!.length > 0">
+      Ver todos
+      <i class="fas fa-solid fa-caret-right"></i>
+    </p>
   </header>
 
   <ng-container *ngIf="(challenges$ | async)!.length > 0 else noChallenges">
@@ -19,7 +23,7 @@
       <swiper-slide *ngFor="let challenge of (challenges$ | async)!">
         <app-challenge-card
           [challenge]="challenge"
-          routerLink="/general/challenges"
+          [routerLink]="['/personal/challenge', challenge.id]"
         ></app-challenge-card>
       </swiper-slide>
     </swiper-container>

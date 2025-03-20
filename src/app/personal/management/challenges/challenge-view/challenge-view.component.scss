@@ -1,0 +1,111 @@
+:host {
+  h3, h4, h5, p {
+    font-family: "Poppins", sans-serif;
+  }
+
+  .view-container {
+    border: 1px solid white;
+    border-radius: 20px;
+    padding: 20px 12px;
+    background-color: #313131;
+
+    h3 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 12px;
+      margin-bottom: 0px;
+    }
+  }
+
+  .users-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .user-card {
+    border-radius: 15px;
+    padding: 15px;
+    background-color: white;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .rank-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: black;
+      margin-right: 12px;
+      min-width: 30px;
+    }
+    
+    .user-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    h4 {
+      font-size: 14px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+    
+    .crown-icon {
+      font-size: 22px;
+      color: #FFD700;
+    }
+  }
+
+  .no-completions {
+    font-size: 12px;
+  }
+}
+
+.challenge-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  
+  .challenge-header {
+    padding: 1rem;
+    background-color: #222;
+    
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+  }
+  
+  .challenge-content {
+    p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+  
+  .challenge-meta {
+    font-size: 1.2rem;
+  }
+}
+
+.empty-state {
+  background-color: #222;
+  border-radius: 0.75rem;
+  
+  i {
+    color: #FF8C42;
+    font-size: 2.5rem;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+} 

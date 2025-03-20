@@ -1,6 +1,6 @@
 <app-header title="Aluno" [hasHome]="true"></app-header>
 
-<div class="member-view-container p-3">
+<div class="member-view-container">
   <div class="member-card bg-white" *ngIf="member$ | async as member">
     <div class="d-flex w-100 h-100">
       <img
@@ -30,12 +30,8 @@
       <ng-container *ngIf="trainings.length > 0; else noTrainings">
         <app-card
           *ngFor="let training of trainings"
-          [title]="training.name.toLocaleUpperCase()"
-          [duration]="
-            formatDuration(
-              training.last_duration || training.duration.toString()
-            )
-          "
+          [title]="training.name.toLocaleUpperCase() || 'Treino'"
+          [duration]="getDuration(training)"
           imageSrc="assets/images/default-training-profile.png"
           size="large"
           [routerLink]="[

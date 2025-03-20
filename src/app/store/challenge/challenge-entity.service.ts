@@ -11,8 +11,10 @@ import { ChallengeDataService } from './challenge-data.service';
 export class ChallengeEntityService extends EntityCollectionServiceBase<Challenge> {
   private challengesSubject = new BehaviorSubject<Challenge[]>([]);
   private challengeDataService = inject(ChallengeDataService);
+  private challengeByIdSubject = new BehaviorSubject<Challenge | undefined>(undefined);
 
   readonly challenges$ = this.challengesSubject.asObservable();
+  readonly challengeById$ = this.challengeByIdSubject.asObservable();
 
   constructor(
     serviceElementsFactory: EntityCollectionServiceElementsFactory,
@@ -29,9 +31,12 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
   }
 
   getChallengeById(id: number): Observable<Challenge | undefined> {
-    return this.challenges$.pipe(
-      map(challenges => challenges.find(challenge => challenge.id === id))
-    );
+    this.challengeDataService.getChallengeById(id).subscribe(challenge => {
+      console.log(challenge);
+      this.challengeByIdSubject.next(challenge);
+    });
+
+    return this.challengeById$;
   }
 
   getTodayChallenges(): Observable<Challenge[]> {
