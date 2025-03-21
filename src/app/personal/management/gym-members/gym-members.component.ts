@@ -5,12 +5,11 @@ import { User } from '../../../shared/models/users.model';
 import { Observable } from 'rxjs';
 import { UserEntityService } from '../../../store/user/user-entity.service';
 import { Router } from '@angular/router';
-import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-gym-members',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, TruncatePipe],
+  imports: [CommonModule, HeaderComponent],
   templateUrl: './gym-members.component.html',
   styleUrl: './gym-members.component.scss'
 })

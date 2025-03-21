@@ -20,6 +20,7 @@ import { RestTimerService } from '../training-view/services/rest-timer.service';
 import { TrainingStateService } from '../training-view/services/training-state.service';
 import { FormsModule } from '@angular/forms';
 import { UserEntityService } from '../../../store/user/user-entity.service';
+import { ExerciseService } from '../../services/exercise.service';
 
 @Component({
   selector: 'app-exercise-view',
@@ -38,6 +39,7 @@ export class ExerciseViewComponent {
   private readonly store = inject(Store<AppState>);
   private readonly trainingStateService = inject(TrainingStateService);
   private readonly userService = inject(UserEntityService);
+  private readonly exerciseService = inject(ExerciseService);
 
   public readonly exerciseViewService = inject(ExerciseViewService);
   public readonly restTimer = inject(RestTimerService);
@@ -150,7 +152,7 @@ export class ExerciseViewComponent {
 
     this.isEditingWeight = true;
     this.currentEditingSeriesIndex = seriesIndex;
-    this.editWeight = exercise.repetitions[seriesIndex]?.weight || null;
+    this.editWeight = this.getWeightForSeries(exercise.repetitions, seriesIndex);
   }
 
   async confirmWeightEdit() {
@@ -159,6 +161,12 @@ export class ExerciseViewComponent {
 
     const repetition = exercise.repetitions[this.currentEditingSeriesIndex];
     if (!repetition) return;
+    
+    const updatedRepetitions = [...exercise.repetitions];
+    updatedRepetitions[this.currentEditingSeriesIndex] = {
+      ...repetition,
+      weight: this.editWeight
+    };
     
     this.exerciseViewService.updateRepetitionWeight(
       repetition.training_exerciseID,
@@ -172,6 +180,8 @@ export class ExerciseViewComponent {
   }
 
   getWeightForSeries(repetitions: Repetition[], seriesIndex: number): number | null {
+    if (!repetitions || !repetitions[seriesIndex]) return null;
+  
     return repetitions[seriesIndex]?.weight || null;
   }
 }

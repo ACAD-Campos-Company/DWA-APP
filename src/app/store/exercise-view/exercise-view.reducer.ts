@@ -25,10 +25,28 @@ export const exerciseViewReducer = createReducer(
     ...initialExerciseViewState
   })),
   on(ExerciseViewActions.setExercises, (state, { exercises, selectedExerciseId, source }) => {
-    const currentIndex = exercises.findIndex(ex => ex.id === selectedExerciseId);
+    const updatedExercises = exercises.map(newExercise => {
+      const existingExercise = state.exercises.find(e => e.id === newExercise.id);
+      
+      if (!existingExercise) {
+        return newExercise;
+      }
+      
+      const updatedRepetitions = newExercise.repetitions.map(newRep => {
+        const existingRep = existingExercise.repetitions.find(r => r.id === newRep.id);
+        return existingRep ? { ...newRep, weight: existingRep.weight } : newRep;
+      });
+      
+      return {
+        ...newExercise,
+        repetitions: updatedRepetitions
+      };
+    });
+    
+    const currentIndex = updatedExercises.findIndex(ex => ex.id === selectedExerciseId);
     return {
       ...state,
-      exercises,
+      exercises: updatedExercises,
       selectedExerciseId,
       source,
       currentIndex: currentIndex >= 0 ? currentIndex : 0,
@@ -69,26 +87,33 @@ export const exerciseViewReducer = createReducer(
       [exerciseId]: seriesIndex
     }
   })),
-  on(ExerciseViewActions.updateRepetitionWeight, (state, { userExerciseId, weight }) => ({
+  on(ExerciseViewActions.updateRepetitionWeight, (state, { userExerciseId, weight, repetitionId }) => ({
     ...state,
     exercises: state.exercises.map(exercise => {
-      const repetition = exercise.repetitions.find(rep => rep.id === userExerciseId);
-      if (!repetition) return exercise;
+      const hasRepetition = exercise.repetitions.some(rep => rep.id === repetitionId);
+      
+      if (!hasRepetition) return exercise;
 
       return {
         ...exercise,
         repetitions: exercise.repetitions.map(rep => 
-          rep.id === userExerciseId ? { ...rep, weight } : rep
+          rep.id === repetitionId ? { ...rep, weight } : rep
         )
       };
     })
   })),
-  on(ExerciseViewActions.updateRepetitionWeightSuccess, (state, { updatedRepetition }) => {
+  on(ExerciseViewActions.updateRepetitionWeightSuccess, (state, { updatedRepetition, repetitionId, weight }) => {
     const updatedExercises = state.exercises.map(exercise => {
-      const updatedRepetitions = exercise.repetitions.map(rep => 
-        rep.id === updatedRepetition.id ? { ...rep, weight: updatedRepetition.weight } : rep
-      );
-      return { ...exercise, repetitions: updatedRepetitions };
+      const hasRepetition = exercise.repetitions.some(rep => rep.id === repetitionId);
+      
+      if (!hasRepetition) return exercise;
+      
+      return {
+        ...exercise,
+        repetitions: exercise.repetitions.map(rep => 
+          rep.id === repetitionId ? { ...rep, weight } : rep
+        )
+      };
     });
 
     return {
