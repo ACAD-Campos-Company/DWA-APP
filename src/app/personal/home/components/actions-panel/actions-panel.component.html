@@ -1,10 +1,10 @@
-<div class="dashboard-actions w-100 d-flex justify-content-center gap-4">
+<div class="dashboard-actions d-grid w-100">
   <div
-    class="action-card justify-content-center d-flex flex-column"
+    class="action-card d-flex flex-column align-items-center justify-content-center"
     *ngFor="let action of dashboardActions"
     (click)="onActionClick(action.route)"
   >
     <i [class]="action.icon"></i>
-    <span class="card-action-title text-black font-family-poppins fw-semibold">{{ action.title }}</span>
+    <span class="card-action-title text-black font-family-poppins fw-semibold text-center text-truncate">{{ action.title }}</span>
   </div>
 </div>

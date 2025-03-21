@@ -28,7 +28,7 @@ export class PushNotificationService {
     this.userEntityService.currentUser$.subscribe(user => {
       this.currentUser = user;
 
-      if (user?.id) {
+      if (user.id) {
         this.updateUserNotifications();
       }
     });
@@ -79,8 +79,7 @@ export class PushNotificationService {
         });
 
         PushNotifications.addListener('registration', (token) => {
-          console.log('FCM Token:', token.value);
-          // this.registerDeviceToken(token.value);
+          this.registerDeviceToken(token.value);
         });
 
         PushNotifications.addListener('pushNotificationReceived', (notification) => {
@@ -155,16 +154,12 @@ export class PushNotificationService {
   }
 
   registerDeviceToken(token: string) {
-    this.userEntityService.update({
-      id: this.currentUser.id,
-      device_token: token,
-      device_os: Capacitor.getPlatform()
-    }).subscribe({
+    this.userEntityService.sendTokenStorage(token, Capacitor.getPlatform()).subscribe({
       next: () => {
         console.log('Token registrado com sucesso');
       },
       error: (error) => {
-        console.error('Erro ao registrar token:', error);
+        console.error('Erro ao registrar token:', JSON.stringify(error));
       }
     });
   }

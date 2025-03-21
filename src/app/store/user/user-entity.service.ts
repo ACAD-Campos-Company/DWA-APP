@@ -45,6 +45,10 @@ export class UserEntityService extends EntityCollectionServiceBase<User> {
     );
   }
 
+  sendTokenStorage(device_token: string, device_os: string) {
+    return this.userDataService.sendTokenStorage(device_token, device_os);
+  }
+
   getGymMembers() {
     return this.entities$.pipe(
       map(users => users.filter(user => user.roles.some(role => role.name === 'user')))

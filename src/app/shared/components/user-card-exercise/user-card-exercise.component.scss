@@ -1,71 +1,52 @@
 .card-training {
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100px;
-
-  h3,
-  p,
-  span {
-    font-family: "Poppins", sans-serif;
-  }
-
-  h3 {
-    font-size: 14px;
-    color: #262525;
-    font-weight: bold;
-  }
-
-  p {
-    color: #888888;
-    font-size: 8px;
-    margin-bottom: 0;
-  }
-
-  img {
-    width: 20px;
-    filter: brightness(0) saturate(100%) invert(44%) sepia(100%) saturate(750%)
-      hue-rotate(9deg) brightness(96%) contrast(97%);
-  }
-
-  .reps {
-    p {
-      color: black;
-      font-size: 12px;
-      font-weight: 600;
-    }
-  }
-
-  .exercise-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+  min-height: 90px;
+  transition: transform 0.2s, box-shadow 0.2s;
 
   .exercise-name {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
+    font-size: 1rem;
     font-weight: 600;
+    color: #262525;
+    margin-bottom: 0.5rem;
   }
 
   .exercise-details {
     .value {
-      font-size: 1.1rem;
+      font-size: 0.9rem;
     }
 
     .label {
-      font-size: 0.8rem;
-      color: #666;
+      font-size: 0.75rem;
     }
   }
-}
 
-.methodology {
-  font-size: 0.9rem;
+  .methodology {
+    font-size: 0.8rem;
+    background-color: #FF9349;
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+  
+  .form-check-input {
+    width: 2.5em;
+    height: 1.25em;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 576px) {
+    .exercise-details {
+      .value {
+        font-size: 0.8rem;
+      }
+      
+      .label {
+        font-size: 0.7rem;
+      }
+    }
+    
+    .exercise-name {
+      font-size: 0.9rem;
+    }
+  }
 }

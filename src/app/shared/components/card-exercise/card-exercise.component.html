@@ -1,12 +1,12 @@
 <ng-container>
   <div
-    class="card-training d-flex justify-content-between align-items-center mb-3 gap-3 bg-white"
+    class="card-training d-flex justify-content-between align-items-center mb-3 p-3 gap-3 bg-white rounded-4 shadow-sm"
     (click)="onExerciseClick()"
   >
-    <img src="assets/icons/arm-exercise.svg" />
+    <img src="assets/icons/arm-exercise.svg" class="exercise-icon" />
     <div class="w-100">
-      <p class="font-family-poppins mb-0 fw-lighter mb-0">{{ exercise.category }}</p>
-      <h3 class="font-family-poppins fw-bold">{{ exercise.name.toLocaleUpperCase() }}</h3>
+      <p class="font-family-poppins mb-0 fw-lighter text-secondary text-truncate">{{ exercise.category }}</p>
+      <h3 class="font-family-poppins fw-bold text-dark text-truncate">{{ exercise.name.toLocaleUpperCase() }}</h3>
     </div>
   </div>
 </ng-container>

@@ -1,27 +1,27 @@
 <div class="trainings">
   <div
-    class="d-flex align-items-center"
+    class="trainings-header d-flex align-items-center mb-3"
     [class.justify-content-between]="isPersonal"
   >
     <div class="d-flex align-items-center gap-2">
       <i
         *ngIf="showTodayTraining"
-        class="fas fa-solid fa-fire-flame-curved"
+        class="fas fa-solid fa-fire-flame-curved text-warning"
       ></i>
       <h1
-        class="mb-2 font-family-poppins fw-semibold font-family-poppins text-white"
+        class="m-0 font-family-poppins fw-semibold text-white"
       >
         {{ title }}
       </h1>
     </div>
-    <p
-      class="font-family-poppins fw-semibold"
+    <div 
+      class="see-all d-flex align-items-center font-family-poppins fw-semibold"
       *ngIf="isPersonal"
       routerLink="/personal/trainings"
     >
-      Ver todos
-      <i class="fas fa-solid fa-caret-right"></i>
-    </p>
+      <span>Ver todos</span>
+      <i class="fas fa-solid fa-caret-right ms-1"></i>
+    </div>
   </div>
 
   <div class="d-flex flex-column gap-4">

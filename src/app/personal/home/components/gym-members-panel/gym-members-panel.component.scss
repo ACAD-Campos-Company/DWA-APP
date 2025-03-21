@@ -1,13 +1,21 @@
-.costumers-panel {
+.customers-panel {
   &__header {
     .brand {
       h1 {
-        font-size: 22px;
+        font-size: 1.375rem;
+        
+        @media (max-width: 576px) {
+          font-size: 1.125rem;
+        }
       }
     }
 
     .search {
       width: 300px;
+      
+      @media (max-width: 576px) {
+        width: 100%;
+      }
     }
   }
 
@@ -15,6 +23,7 @@
     swiper-slide {
       height: auto;
       flex-shrink: 0 !important;
+      transition: transform 0.2s;
     }
   }
 }

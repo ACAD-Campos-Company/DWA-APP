@@ -1,11 +1,21 @@
 .btn-primary,
 .btn-success,
 .btn-secondary {
-  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   
   border: none;
   border-radius: 15px;
   padding: 8px;
+  
+  .button-text {
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .btn-primary {
@@ -32,4 +42,13 @@
 
 button:disabled {
   opacity: 0.5;
+}
+
+@media (max-width: 576px) {
+  .btn-primary,
+  .btn-success,
+  .btn-secondary {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+  }
 }

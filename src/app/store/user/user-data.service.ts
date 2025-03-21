@@ -27,4 +27,8 @@ export class UserDataService extends DefaultDataService<User> {
       map(response => response.data)
     );
   }
+
+  sendTokenStorage(device_token: string, device_os: string) {
+    return this.http.post<any>(`${this.baseUrl}/device-token`, { device_token, device_os });
+  }
 } 
