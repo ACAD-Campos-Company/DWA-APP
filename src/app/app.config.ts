@@ -20,6 +20,7 @@ import { UserDataService } from './store/user/user-data.service';
 import { AuthDataService } from './auth/store/auth-data.service';
 import { ChallengeDataService } from './store/challenge/challenge-data.service';
 import { TrainingViewDataService } from './store/training-view/training-view-data.service';
+import { PushNotificationService } from './shared/services/push-notification.service';
 
 export function initializeEntityDataService(
   entityDataService: EntityDataService,
@@ -69,18 +70,19 @@ export const appConfig: ApplicationConfig = {
     AuthDataService,
     ChallengeDataService,
     {
-      provide: APP_INITIALIZER,
-      useFactory: initializeEntityDataService,
-      deps: [
-        EntityDataService, 
-        TrainingDataService, 
-        TrainingViewDataService,
-        ExerciseDataService, 
-        UserDataService, 
-        AuthDataService,
-        ChallengeDataService
-      ],
-      multi: true
-    }
-]
+        provide: APP_INITIALIZER,
+        useFactory: initializeEntityDataService,
+        deps: [
+            EntityDataService,
+            TrainingDataService,
+            TrainingViewDataService,
+            ExerciseDataService,
+            UserDataService,
+            AuthDataService,
+            ChallengeDataService
+        ],
+        multi: true
+    },
+    PushNotificationService
+  ]
 };

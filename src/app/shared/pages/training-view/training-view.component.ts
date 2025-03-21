@@ -140,7 +140,7 @@ export class TrainingViewComponent implements OnInit {
   async onExerciseClick(exercise: Exercise): Promise<void> {
     if ((await firstValueFrom(this.isOtherTrainingActive$)) === true) return;
     this.store.dispatch(ExerciseViewActions.setExercises({
-      exercises: this.getTraining().exercises,
+      exercises: (this.getTraining().exercises || this.getTraining().training_exercises),
       selectedExerciseId: exercise.id,
       source: 'user-training'
     }));

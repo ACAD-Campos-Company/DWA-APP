@@ -1,44 +1,44 @@
 <div
-  class="card-training bg-white d-flex justify-content-between align-items-center mb-3 gap-3 p-3"
+  class="card-training bg-white rounded d-flex justify-content-between align-items-center mb-3 p-3"
   (click)="onExerciseClick()"
 >
-  <div class="d-flex align-items-center gap-3 w-100">
-    <div class="exercise-info w-100 p-3">
-      <h3 class="exercise-name">{{ exercise.exercise_name }}</h3>
+  <div class="d-flex align-items-center w-100">
+    <div class="exercise-info w-100">
+      <h3 class="exercise-name text-truncate">{{ exercise.exercise_name }}</h3>
 
-      <div class="exercise-details d-flex gap-4 mt-3">
-        <div class="text-center text-center d-flex flex-column">
-          <span class="value">{{ exercise.series }}</span>
-          <span class="label">SERIES</span>
+      <div class="exercise-details d-flex flex-wrap gap-3 mt-2">
+        <div class="text-center">
+          <span class="value fw-bold d-block">{{ exercise.series }}</span>
+          <span class="label text-secondary small">SERIES</span>
         </div>
 
-        <div class="text-center text-center d-flex flex-column">
-          <span class="value" *ngIf="exercise.repetitions.length > 0">{{
+        <div class="text-center">
+          <span class="value fw-bold d-block" *ngIf="exercise.repetitions.length > 0">{{
             formatRepetitions(exercise.repetitions)
           }}</span>
           <span
             *ngIf="exercise.methodology"
-            class="methodology font-family-poppins fw-semibold text-white"
+            class="methodology font-family-poppins fw-semibold text-white d-block"
           >
             {{ formatMethodology(exercise.methodology) }}
           </span>
-          <span class="label">MÉTODO</span>
+          <span class="label text-secondary small">MÉTODO</span>
         </div>
 
-        <div class="text-center d-flex flex-column">
-          <span class="value fw-bold">{{ exercise.weight || 0 }}kg</span>
-          <span class="label">CARGA</span>
+        <div class="text-center">
+          <span class="value fw-bold d-block">{{ exercise.weight || 0 }}kg</span>
+          <span class="label text-secondary small">CARGA</span>
         </div>
       </div>
     </div>
-    <div class="exercise-status">
+    <div class="exercise-status ms-2">
       <div class="form-check form-switch">
         <input
           *ngIf="!isAdmin"
           class="form-check-input"
           type="checkbox"
           role="switch"
-          [checked]="isCompleted || isTrainingCompleted"
+          [checked]="isExerciseCompleted || isTrainingCompleted"
           (click)="onToggleExercise($event)"
           [disabled]="
             isTrainingCompleted ||
@@ -47,7 +47,7 @@
             isOtherTrainingActive
           "
           [ngClass]="{
-            'bg-success border-success': isCompleted || isTrainingCompleted,
+            'bg-success border-success': isExerciseCompleted || isTrainingCompleted,
             disabled:
               !isTrainingStarted || isTrainingPaused || isOtherTrainingActive
           }"

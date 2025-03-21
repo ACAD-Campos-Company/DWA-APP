@@ -1,6 +1,21 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.appdistribution'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
+
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    kotlinOptions {
+      jvmTarget = '17'
+      apiVersion = '2.1'
+      languageVersion = '2.1'
+    }
+  }
     namespace "com.gcptecnologia.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -15,6 +30,9 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
+        manifestPlaceholders = [
+            'android.adservices.AD_SERVICES_ENABLED': 'false'
+        ]
     }
     buildTypes {
         release {
@@ -30,6 +48,7 @@ repositories {
     }
 }
 
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -40,9 +59,22 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation platform("com.google.firebase:firebase-bom:33.9.0")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation("com.google.firebase:firebase-auth")
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation("com.google.firebase:firebase-firestore")
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-perf'
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation 'com.google.android.gms:play-services-base:18.3.0'
+    implementation 'com.google.android.gms:play-services-basement:18.3.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 }
 
 apply from: 'capacitor.build.gradle'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 try {
     def servicesJSON = file('google-services.json')

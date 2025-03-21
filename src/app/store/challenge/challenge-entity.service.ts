@@ -11,8 +11,10 @@ import { ChallengeDataService } from './challenge-data.service';
 export class ChallengeEntityService extends EntityCollectionServiceBase<Challenge> {
   private challengesSubject = new BehaviorSubject<Challenge[]>([]);
   private challengeDataService = inject(ChallengeDataService);
+  private challengeByIdSubject = new BehaviorSubject<Challenge | undefined>(undefined);
 
   readonly challenges$ = this.challengesSubject.asObservable();
+  readonly challengeById$ = this.challengeByIdSubject.asObservable();
 
   constructor(
     serviceElementsFactory: EntityCollectionServiceElementsFactory,
@@ -29,9 +31,12 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
   }
 
   getChallengeById(id: number): Observable<Challenge | undefined> {
-    return this.challenges$.pipe(
-      map(challenges => challenges.find(challenge => challenge.id === id))
-    );
+    this.challengeDataService.getChallengeById(id).subscribe(challenge => {
+      console.log(challenge);
+      this.challengeByIdSubject.next(challenge);
+    });
+
+    return this.challengeById$;
   }
 
   getTodayChallenges(): Observable<Challenge[]> {
@@ -46,14 +51,14 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
   completeChallenge(payload: { challenge_id: number, user_id: number }): Observable<Challenge> {
     return this.challengeDataService.completeChallenge(payload).pipe(
       tap((response: Challenge) => {
-        const update = { id: response.id!, changes: response };
+        const update = { id: response.challenge_id, changes: response };
 
         super.updateOneInCache(update);
         const currentChallenges = this.challengesSubject.getValue();
-        if (currentChallenges.some(ch => ch.id === response.id)) {
+        if (currentChallenges.some(ch => ch.id === response.challenge_id)) {
           this.challengesSubject.next(
             currentChallenges.map(ch =>
-              ch.id === response.id ? response : ch
+              ch.id === response.challenge_id ? response : ch
             )
           );
         }

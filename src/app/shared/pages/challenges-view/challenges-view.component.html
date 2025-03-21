@@ -29,20 +29,19 @@
 </ng-container>
 
 <ng-container *ngFor="let challenge of challenges$ | async">
-  <app-challenge-view-card
+  <app-challenge-view-card  
     [challenge]="challenge"
     (completeChallenge)="completeChallenge($event)"
     [isAdmin]="isAdmin"
   ></app-challenge-view-card>
 </ng-container>
 
-<h3>Concluídos</h3>
+<h2 class="font-family-poppins text-white fw-semibold mb-4 fs-3" *ngIf="!isAdmin">Desafios Concluídos</h2>
 
 <ng-container *ngIf="(completedChallenges$ | async)?.length; else showEmptyState">
   <ng-container *ngFor="let challenge of completedChallenges$ | async">
     <app-challenge-view-card
       [challenge]="challenge"
-      [completed]="true"
     ></app-challenge-view-card>
   </ng-container>
 </ng-container>

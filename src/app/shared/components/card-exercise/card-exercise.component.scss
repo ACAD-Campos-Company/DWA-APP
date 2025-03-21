@@ -1,21 +1,42 @@
 .card-training {
-  border-radius: 20px;
-  padding: 8px 16px;
-  height: 50px;
+  border-radius: 1.25rem;
+  height: auto;
+  min-height: 3.5rem;
 
   h3 {
-    font-size: 14px;
-    color: #262525;
+    font-size: 0.875rem;
+    margin-bottom: 0;
   }
 
   p {
     color: #888888;
-    font-size: 8px;
+    font-size: 0.6rem;
+    line-height: 1.2;
   }
 
-  img {
-    width: 20px;
+  .exercise-icon {
+    width: 1.5rem;
+    height: 1.5rem;
     filter: brightness(0) saturate(100%) invert(44%) sepia(100%) saturate(750%)
       hue-rotate(9deg) brightness(96%) contrast(97%);
+  }
+}
+
+@media (max-width: 576px) {
+  .card-training {
+    padding: 0.5rem 0.75rem;
+    
+    h3 {
+      font-size: 0.75rem;
+    }
+    
+    p {
+      font-size: 0.5rem;
+    }
+    
+    .exercise-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
   }
 }

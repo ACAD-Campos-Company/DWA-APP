@@ -23,6 +23,7 @@ export interface Training {
   duration: number,
   todayTraining: boolean,
   exercises: Exercise[],
+  training_exercises: Exercise[],
   completed: boolean,
   last_duration: string,
   origin_trainingID?: number,

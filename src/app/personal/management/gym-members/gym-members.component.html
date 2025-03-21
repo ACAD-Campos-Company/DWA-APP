@@ -7,7 +7,7 @@
       *ngFor="let member of members$ | async"
     >
       <div
-        class="d-flex align-items-center gap-3"
+        class="d-flex align-items-center gap-3 w-100"
         (click)="goToMemberView(member.id)"
       >
         <img
@@ -17,16 +17,16 @@
           alt="Foto do perfil"
           class="profile-pic"
         />
-        <div class="member-details">
-          <h2 class="mb-3 font-family-poppins text-white">{{ member.username }}</h2>
+        <div class="member-details text-truncate">
+          <h2 class="mb-3 font-family-poppins text-white text-truncate">{{ member.username }}</h2>
           <div class="contact-info d-flex flex-column gap-2">
-            <span class="d-flex align-items-center gap-1 font-light font-family-poppins text-white">
-              <i class="fas fa-phone me-2"></i>
-              {{ member.telephone || "Não informado" }}
+            <span class="d-flex align-items-center gap-1 font-light font-family-poppins text-white text-truncate">
+              <i class="fas fa-phone me-2 flex-shrink-0"></i>
+              <span class="text-truncate">{{ member.telephone || "Não informado" }}</span>
             </span>
-            <span class="d-flex align-items-center gap-1 font-light font-family-poppins text-white">
-              <i class="fas fa-envelope me-2"></i>
-              {{ member.email || "Não informado" }}
+            <span class="d-flex align-items-center gap-1 font-light font-family-poppins text-white text-truncate">
+              <i class="fas fa-envelope me-2 flex-shrink-0"></i>
+              <span class="text-truncate">{{ member.email || "Não informado" }}</span>
             </span>
           </div>
         </div>

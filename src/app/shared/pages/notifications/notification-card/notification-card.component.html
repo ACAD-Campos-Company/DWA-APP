@@ -1,0 +1,9 @@
+<div class="notification-card bg-white" [class.read]="read">
+    <div class="notification-header d-flex justify-content-between align-items-start">
+      <h3 class="fw-semibold">{{ title }}</h3>
+      <button *ngIf="!read" class="close-btn" (click)="onClose.emit()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <p class="notification-body">{{ body }}</p>
+  </div>

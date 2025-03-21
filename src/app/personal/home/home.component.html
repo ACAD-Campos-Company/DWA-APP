@@ -1,6 +1,7 @@
 <ng-container *ngIf="currentUser$ | async as currentUser">
   <app-header [currentUser]="currentUser" [isAdmin]="isAdmin" [homeMode]="true"></app-header>
 
+  <div>
     <div class="content d-flex flex-column gap-4">
       <app-keymetric-panel
         [userCount$]="userCount$"
@@ -19,5 +20,6 @@
         [isPersonal]="true"
       ></app-trainings-panel>
     </div>
-  </ng-container>
+  </div>
+</ng-container>
   

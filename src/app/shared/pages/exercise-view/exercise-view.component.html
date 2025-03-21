@@ -1,16 +1,12 @@
 <div class="h-100" *ngIf="exercise$ | async as exercise">
   <app-header title="Exercício" [hasHome]="true"></app-header>
   <div class="view-container d-flex w-100 justify-content-center">
-    <div
-      class="d-flex flex-column justify-content-around w-100 align-items-start"
-    >
+    <div class="d-flex flex-column justify-content-around w-100 align-items-start">
       <div class="w-100 text-center mb-3">
-        <h3>{{ exercise.exercise_name || exercise.name }}</h3>
+        <h3 class="font-family-poppins fw-semibold">{{ exercise.exercise_name || exercise.name }}</h3>
       </div>
 
-      <div
-        class="exercise-image-container border border-warning rounded d-flex flex-column justify-content-center align-items-center p-3 mb-3"
-      >
+      <div class="exercise-image-container border border-warning rounded d-flex flex-column justify-content-center align-items-center p-3 mb-3 w-100">
         <img
           [src]="exercise.image || 'assets/images/default-trained-muscles.png'"
           alt="Exercise Image"
@@ -18,21 +14,10 @@
         />
       </div>
 
-      <div class="w-100 mb-2" *ngIf="exercise.user_trainingID">
-        <div class="training-info p-2 mb-2">
-          <ul
-            class="nav nav-tabs justify-content-center"
-            id="exerciseTabs"
-            role="tablist"
-          >
-            <li
-              class="nav-item"
-              role="presentation"
-              *ngFor="
-                let series of createSeriesArray(exercise.series);
-                let i = index
-              "
-            >
+      <div class="w-100 mb-3" *ngIf="exercise.user_trainingID">
+        <div class="training-info p-3 mb-3 rounded-4">
+          <ul class="nav nav-tabs justify-content-center" id="exerciseTabs" role="tablist">
+            <li class="nav-item" role="presentation" *ngFor="let series of createSeriesArray(exercise.series); let i = index">
               <button
                 class="nav-link d-flex align-items-center gap-2"
                 [class.active]="(currentSeries$ | async) === i"
@@ -47,10 +32,7 @@
               >
                 Série {{ i + 1 }}
                 <img
-                  *ngIf="
-                    (exerciseViewService.isSeriesCompleted(i) | async) ||
-                    (isTrainingCompleted$ | async)
-                  "
+                  *ngIf="(exerciseViewService.isSeriesCompleted(i) | async) || (isTrainingCompleted$ | async)"
                   src="assets/icons/done.svg"
                   alt="Concluído"
                   class="series-done-icon"
@@ -64,59 +46,27 @@
               class="tab-pane fade"
               [class.show]="(currentSeries$ | async) === i"
               [class.active]="(currentSeries$ | async) === i"
-              *ngFor="
-                let series of createSeriesArray(exercise.series);
-                let i = index
-              "
+              *ngFor="let series of createSeriesArray(exercise.series); let i = index"
               [id]="'series-' + i"
               role="tabpanel"
               [attr.aria-labelledby]="'series-' + i + '-tab'"
             >
               <div class="d-flex flex-column gap-3">
                 <div class="d-flex justify-content-around">
-                  <div
-                    class="d-flex align-items-center gap-2"
-                    *ngIf="
-                      !hasMethodology(exercise) &&
-                      exercise.repetitions.length > 0
-                    "
-                  >
-                    <img
-                      src="assets/icons/exercise-view/rep.svg"
-                      alt="Repetitions"
-                      class="img-fluid"
-                    />
-                    <span
-                      >{{
-                        getRepetitionForSeries(exercise.repetitions, i)
-                      }}
-                      rep</span
-                    >
+                  <div class="d-flex align-items-center gap-2" *ngIf="!hasMethodology(exercise) && exercise.repetitions.length > 0">
+                    <img src="assets/icons/exercise-view/rep.svg" alt="Repetitions" class="img-fluid exercise-icon" />
+                    <span class="font-family-poppins">{{ getRepetitionForSeries(exercise.repetitions, i) }} rep</span>
                   </div>
 
                   <div class="d-flex align-items-center gap-2">
-                    <img
-                      src="assets/icons/exercise-view/weight.svg"
-                      alt="Weight"
-                      class="img-fluid"
-                    />
-                    <ng-container
-                      *ngIf="
-                        !isEditingWeight || currentEditingSeriesIndex !== i;
-                        else weightEdit
-                      "
-                    >
-                      <span
-                        >{{
-                          getWeightForSeries(exercise.repetitions, i) || 0
-                        }}kg</span
-                      >
+                    <img src="assets/icons/exercise-view/weight.svg" alt="Weight" class="img-fluid exercise-icon" />
+                    <ng-container *ngIf="!isEditingWeight || currentEditingSeriesIndex !== i; else weightEdit">
+                      <span class="font-family-poppins">{{ getWeightForSeries(exercise.repetitions, i) || 0 }}kg</span>
                       <img
                         *ngIf="!isAdmin"
                         src="assets/icons/exercise-view/pencil.svg"
                         alt="Edit"
-                        class="img-fluid cursor-pointer"
-                        style="width: 19px; height: 13px"
+                        class="img-fluid pencil-icon"
                         (click)="startWeightEdit(i)"
                       />
                     </ng-container>
@@ -131,7 +81,7 @@
                       <img
                         src="assets/icons/done.svg"
                         alt="Confirm"
-                        class="img-fluid cursor-pointer confirm-icon"
+                        class="img-fluid confirm-icon"
                         (click)="confirmWeightEdit()"
                       />
                     </ng-template>
@@ -139,26 +89,20 @@
 
                   <div class="d-flex align-items-center gap-2">
                     <i class="fa-solid fa-clock"></i>
-                    <span>{{ exercise.rest }}s</span>
+                    <span class="font-family-poppins">{{ exercise.rest }}s</span>
                   </div>
                 </div>
 
                 <app-button
                   *ngIf="!isAdmin"
                   [label]="
-                    (isExerciseCompleted$ | async) ||
-                    (isTrainingCompleted$ | async)
+                    (isExerciseCompleted$ | async) || (isTrainingCompleted$ | async)
                       ? 'Exercício Concluído'
                       : isLastSeries(exercise, i)
                       ? 'Concluir Exercício'
                       : 'Próxima Série'
                   "
-                  [icon]="
-                    (isExerciseCompleted$ | async) ||
-                    (isTrainingCompleted$ | async)
-                      ? 'assets/icons/done.svg'
-                      : ''
-                  "
+                  [icon]="(isExerciseCompleted$ | async) || (isTrainingCompleted$ | async) ? 'assets/icons/done.svg' : ''"
                   buttonClass="btn-success"
                   class="w-100"
                   [disabled]="
@@ -174,11 +118,7 @@
         </div>
         <app-button
           *ngIf="!isAdmin"
-          [label]="
-            (restTimer.timer$ | async) === null
-              ? exercise.rest + 's'
-              : (restTimer.timer$ | async) + 's'
-          "
+          [label]="(restTimer.timer$ | async) === null ? exercise.rest + 's' : (restTimer.timer$ | async) + 's'"
           buttonClass="btn-secondary"
           class="w-100"
           (clicked)="startRestTimer(exercise.rest)"
@@ -188,53 +128,44 @@
         </app-button>
       </div>
 
-      <div class="d-flex flex-column gap-2 w-100">
+      <div class="d-flex flex-column gap-3 w-100 mb-4">
         <div class="w-100 info-section">
-          <h4 class="mb-1">Descrição:</h4>
-          <div class="content-box">
-            <p class="mb-0">
-              {{ exercise.description || exercise.exercise.description }}
-            </p>
+          <h4 class="mb-2 font-family-poppins fw-medium">Descrição:</h4>
+          <div class="content-box bg-light rounded p-3">
+            <p class="mb-0 font-family-poppins">{{ exercise.description || exercise.exercise.description }}</p>
           </div>
         </div>
 
         <div class="w-100 info-section">
-          <h4 class="mb-1">Músculos Trabalhados:</h4>
-          <div class="content-box">
-            <p class="mb-0">
-              {{ exercise.category || exercise.exercise.category }}
-            </p>
+          <h4 class="mb-2 font-family-poppins fw-medium">Músculos Trabalhados:</h4>
+          <div class="content-box bg-light rounded p-3">
+            <p class="mb-0 font-family-poppins">{{ exercise.category || exercise.exercise.category }}</p>
           </div>
         </div>
 
         <div class="w-100 info-section">
-          <h4 class="mb-1">Equipamento:</h4>
-          <div class="content-box">
-            <p class="mb-0">
-              {{ exercise.equipment || exercise.exercise.equipment }}
-            </p>
+          <h4 class="mb-2 font-family-poppins fw-medium">Equipamento:</h4>
+          <div class="content-box bg-light rounded p-3">
+            <p class="mb-0 font-family-poppins">{{ exercise.equipment || exercise.exercise.equipment }}</p>
           </div>
         </div>
 
-        <div
-          class="w-100 info-section"
-          *ngIf="hasMethodology(exercise) && exercise.user_trainingID"
-        >
-          <h4 class="mb-1">Metodologia:</h4>
-          <div class="content-box">
-            <p class="mb-0">{{ exercise.methodology }}</p>
+        <div class="w-100 info-section" *ngIf="hasMethodology(exercise) && exercise.user_trainingID">
+          <h4 class="mb-2 font-family-poppins fw-medium">Metodologia:</h4>
+          <div class="content-box bg-light rounded p-3">
+            <p class="mb-0 font-family-poppins">{{ exercise.methodology }}</p>
           </div>
         </div>
 
         <div class="w-100 info-section" *ngIf="exercise.comments">
-          <h4 class="mb-1">Observações:</h4>
-          <div class="content-box">
-            <p class="mb-0">{{ exercise.comments }}</p>
+          <h4 class="mb-2 font-family-poppins fw-medium">Observações:</h4>
+          <div class="content-box bg-light rounded p-3">
+            <p class="mb-0 font-family-poppins">{{ exercise.comments }}</p>
           </div>
         </div>
       </div>
 
-      <div class="w-100 d-flex flex-column gap-2">
+      <div class="w-100 d-flex flex-column gap-2 mb-3">
         <div class="d-flex gap-2 w-100 flex-column">
           <app-button
             [disabled]="!(hasNextExercise$ | async)"

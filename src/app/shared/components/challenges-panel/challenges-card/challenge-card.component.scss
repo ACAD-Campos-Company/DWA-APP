@@ -4,7 +4,15 @@
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  &.difficulty-advanced {
+  &.difficulty-beginner-background {
+    background-color: #c6e4d2;
+  }
+
+  &.difficulty-intermediate-background {
+    background-color: #fdeabc;
+  }
+
+  &.difficulty-advanced-background {
     background-color: #ffd5ba;
   }
 
@@ -30,14 +38,14 @@
     width: fit-content;
 
     &.difficulty-beginner-tag {
-      background-color: #00a300;
+      background-color: #017e31;
     }
 
     &.difficulty-intermediate-tag {
-      background-color: #0000ff;
+      background-color: #f09600;
     }
 
-    &.difficulty-advanced-tag {
+    &.difficulty-background-tag {
       background-color: #ff4800;
     }
   }

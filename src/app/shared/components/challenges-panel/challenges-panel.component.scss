@@ -4,5 +4,34 @@
       width: 20px;
       height: 20px;
     }
+
+    h3 {
+      font-size: 1.375rem;
+    }
+
+    .see-all {
+      color: #FF8C42;
+      font-size: 0.75rem;
+      transition: opacity 0.2s;
+    }
+  }
+
+  &__slider {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .challenges-panel {
+    &__header {
+      h3 {
+        font-size: 1.125rem;
+      }
+      
+      .see-all {
+        font-size: 0.7rem;
+      }
+    }
   }
 }

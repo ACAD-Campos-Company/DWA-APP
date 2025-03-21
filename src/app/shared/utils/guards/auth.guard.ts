@@ -6,7 +6,15 @@ export const authGuard = async () => {
   const authEntityService = inject(AuthEntityService);
   const router = inject(Router);
 
-  const token = authEntityService.getToken();
+  let token = authEntityService.getToken();
+  
+  if (!token) {
+    token = localStorage.getItem('authToken') || '';
+    
+    if (token) {
+      authEntityService.setTokenFromStorage(token);
+    }
+  }
 
   if (token) {
     return true;

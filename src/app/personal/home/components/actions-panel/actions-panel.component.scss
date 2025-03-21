@@ -1,22 +1,54 @@
 @import '../../../../shared/styles/variables.scss';
 
 .dashboard-actions {
-    .action-card {
-      background-color: $action-card-background;
-      width: 110px;
-      height: 74px;
-      border-radius: 8px;
-      padding: 8px;
-    }
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
   
-    .card-action-title {
-      font-size: 12px;
-      margin-top: 8px;
-    }
-  
-    img {
-      width: 20px;
-      filter: invert(0%) brightness(0) saturate(100%);
+  .action-card {
+    background-color: $action-card-background;
+    width: 100%;
+    height: 74px;
+    border-radius: 8px;
+    padding: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
+
+  .card-action-title {
+    font-size: 12px;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  i {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-actions {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    
+    .action-card {
+      width: 100%;
+      height: 70px;
+      padding: 6px;
+    }
+    
+    .card-action-title {
+      font-size: 10px;
+      margin-top: 4px;
+    }
+    
+    i {
+      font-size: 1rem;
+    }
+  }
+}
   

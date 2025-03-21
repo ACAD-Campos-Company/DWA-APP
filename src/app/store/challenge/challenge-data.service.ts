@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Challenge, completeChallengeData, todayChallengeData } from '../../shared/models/challenge.model';
+import { Challenge, dataChallenge, todayChallengeData } from '../../shared/models/challenge.model';
 import { DefaultDataService, HttpUrlGenerator } from '@ngrx/data';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
@@ -26,6 +26,12 @@ export class ChallengeDataService extends DefaultDataService<Challenge> {
     );
   }
 
+  getChallengeById(id: number): Observable<Challenge> {
+    return this.http.get<dataChallenge>(`${this.routes.challenges}/${id}`).pipe(
+      map((response: dataChallenge) => response.data)
+    );
+  }
+
   getTodayChallenges(): Observable<Challenge[]> {
     return this.http.get<todayChallengeData>(this.routes.todayChallenges).pipe(
       map((response: todayChallengeData) => response.data)
@@ -33,8 +39,8 @@ export class ChallengeDataService extends DefaultDataService<Challenge> {
   }
 
   completeChallenge(payload: { challenge_id: number, user_id: number }): Observable<Challenge> {
-    return this.http.post<completeChallengeData>(this.routes.userChallenges, payload).pipe(
-      map((response: completeChallengeData) => response.data.challenge)
+    return this.http.post<dataChallenge>(this.routes.userChallenges, payload).pipe(
+      map((response: dataChallenge) => response.data)
     );
   }
 } 

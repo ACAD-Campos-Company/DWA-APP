@@ -1,0 +1,42 @@
+<app-header title="Notificações"></app-header>
+
+<div>
+  <div class="notifications-section">
+    <h3 class="section-title mb-3 text-white fw-semibold">Não lidas</h3>
+    <ng-container *ngIf="unreadNotifications$ | async">
+      <app-notification-card
+        *ngFor="let notification of unreadNotifications$ | async"
+        [title]="notification.title"
+        [body]="notification.body"
+        [read]="false"
+        (onClose)="markAsRead(notification.id)"
+      >
+      </app-notification-card>
+    </ng-container>
+    <div
+      *ngIf="(unreadNotifications$ | async)!.length === 0"
+      class="empty-section"
+    >
+      <p class="text-white">Sem notificações não lidas</p>
+    </div>
+  </div>
+
+  <div class="notifications-section">
+    <h3 class="section-title mb-3 text-white fw-semibold">Lidas</h3>
+    <ng-container *ngIf="readNotifications$ | async">
+      <app-notification-card
+        *ngFor="let notification of readNotifications$ | async"
+        [title]="notification.title"
+        [body]="notification.body"
+        [read]="true"
+      >
+      </app-notification-card>
+    </ng-container>
+    <div
+      *ngIf="(readNotifications$ | async)!.length === 0"
+      class="empty-section"
+    >
+      <p class="text-white">Sem notificações lidas</p>
+    </div>
+  </div>
+</div>

@@ -1,10 +1,10 @@
 <button
-  class="w-100 d-flex gap-2 justify-content-center align-items-center fw-bold font-family-poppins"
+  class="w-100 d-flex gap-2 justify-content-center align-items-center fw-bold font-family-poppins text-nowrap text-center"
   [ngClass]="[buttonClass || '']"
   (click)="onClick()"
   [disabled]="disabled"
 >
-  {{ label }}
-  <img *ngIf="icon" [src]="icon" />
+  <span class="button-text">{{ label }}</span>
+  <img *ngIf="icon" [src]="icon" alt="button icon" />
   <ng-content [icon]></ng-content>
 </button>

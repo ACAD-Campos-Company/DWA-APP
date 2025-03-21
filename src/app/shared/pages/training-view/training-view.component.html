@@ -90,7 +90,7 @@
     </div>
   </div>
   <h3 class="mt-5 mb-3">Exercícios</h3>
-  <ng-container *ngIf="training.exercises; else noExercises">
+  <ng-container *ngIf="(training.exercises || training.training_exercises); else noExercises">
     <ng-container
       *ngIf="hasUserTraining(training.exercises); else regularExercises"
     >
@@ -103,7 +103,7 @@
           [isTrainingPaused]="(isPaused$ | async) === true"
           [isTrainingCompleted]="training.completed"
           [isOtherTrainingActive]="(isOtherTrainingActive$ | async) === true"
-          [isCompleted]="(isCompleted(exercise.id) | async) === true"
+          [isExerciseCompleted]="(isCompleted(exercise.id) | async) === true"
           (exerciseToggled)="onExerciseCompleted($event)"
           (exerciseClicked)="onExerciseClick($event)"
         ></app-user-card-exercise>
@@ -113,7 +113,7 @@
     <ng-template #regularExercises>
       <div class="exercises-container">
         <app-card-exercise
-          *ngFor="let exercise of training.exercises"
+          *ngFor="let exercise of training.training_exercises"
           [exercise]="exercise"
           (exerciseClicked)="onExerciseClick($event)"
         ></app-card-exercise>

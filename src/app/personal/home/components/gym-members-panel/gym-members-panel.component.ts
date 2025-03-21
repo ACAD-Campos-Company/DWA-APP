@@ -30,7 +30,6 @@ export class GymMembersPanelComponent implements OnInit {
       rows: 3,
       fill: 'row'
     },
-    spaceBetween: 15,
     scrollbar: {
       draggable: true,
       hide: false

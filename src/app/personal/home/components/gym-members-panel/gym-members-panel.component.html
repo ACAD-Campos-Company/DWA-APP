@@ -1,18 +1,19 @@
-<section class="costumers-panel">
-  <header class="costumers-panel__header d-flex justify-content-between align-items-center mb-4">
+<section class="customers-panel">
+  <header class="customers-panel__header d-flex justify-content-between align-items-center mb-4">
     <div class="brand d-flex align-items-center gap-3">
-      <i class="fas fa-fire-flame-curved"></i>
+      <i class="fas fa-fire-flame-curved text-danger"></i>
       <h1 class="text-white font-family-poppins m-0 fw-semibold">ALUNOS CADASTRADOS</h1>
     </div>
   </header>
 
-  <swiper-container
-    class="costumers-panel__grid p-0"
-    [config]="swiperConfig"
-    [slidesPerView]="3"
-    [spaceBetween]="15"
+  <ng-container *ngIf="(filteredGymMembers$ | async)!.length > 0; else noGymMembers">
+    <swiper-container
+      class="customers-panel__grid p-0"
+      [config]="swiperConfig"
+      [slidesPerView]="3"
+      [spaceBetween]="90"
   >
-    <swiper-slide *ngFor="let gymMember of filteredGymMembers$ | async">
+    <swiper-slide *ngFor="let gymMember of (filteredGymMembers$ | async)!">
       <app-card
         [title]="gymMember.username"
         [subtitle]="gymMember.telephone || 'Não informado'"
@@ -20,7 +21,11 @@
         imageSrc="assets/images/default-user-profile.png"
         size="small"
         [routerLink]="['/personal/gym-members', gymMember.id]"
-      ></app-card>
-    </swiper-slide>
-  </swiper-container>
+        ></app-card>
+      </swiper-slide>
+    </swiper-container>
+  </ng-container>
+  <ng-template #noGymMembers>
+    <p class="text-white font-family-poppins text-center">Nenhum usuário cadastrado</p>
+  </ng-template>
 </section>
