@@ -122,4 +122,8 @@
       font-size: 0.5625rem;
     }
   }
+
+  .position-absolute.top-0.start-100.translate-middle.badge {
+    transform: translate(-50%, -50%) scale(0.85) !important;
+  }
 }

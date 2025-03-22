@@ -1,67 +1,45 @@
 <ng-container *ngIf="homeMode; else defaultHeader">
   <header
-    class="header-home d-flex align-items-center justify-content-between mb-3"
+    class="d-flex align-items-center justify-content-between mb-3"
   >
-    <div class="header-left">
-      <h1 class="text-white font-family-poppins fw-bold mb-1">
+    <div>
+      <h1 class="text-white font-family-poppins fw-bold mb-1 fs-5">
         Oi, {{ currentUser.username }}!
       </h1>
-      <p class="subtitle mb-0 text-white fw-light" *ngIf="!isAdmin">
+      <p class="text-white fw-light fst-italic opacity-75 small mb-0" *ngIf="!isAdmin">
         Persistência hoje, resultados amanhã.
       </p>
-      <p class="subtitle mb-0 text-white fw-light" *ngIf="isAdmin">
+      <p class="text-white fw-light fst-italic opacity-75 small mb-0" *ngIf="isAdmin">
         {{ currentUser.roles[0].name }}
       </p>
-
-      <!-- <div class="d-flex align-items-center gap-3">
-        <div class="points-item d-flex align-items-center gap-2">
-          <img src="assets/icons/gold.svg" alt="Gold icon" class="icon" />
-          <span>Gold</span>
-          <img
-            src="assets/icons/chevron-right.svg"
-            alt="Chevron right"
-            class="chevron"
-          />
-        </div>
-  
-        <div class="separator"></div>
-        <div class="points-item">
-          <img src="assets/icons/add-points.svg" alt="Points icon" class="icon" />
-          <span>{{ currentUser.points }}</span>
-          <img
-            src="assets/icons/chevron-right.svg"
-            alt="Chevron right"
-            class="chevron"
-          />
-        </div>
-      </div> -->
     </div>
     <div class="d-flex align-items-center gap-3">
-      <div class="notification-bell position-relative">
-        <i class="fas fa-bell fs-5" routerLink="/notifications"></i>
-        <span class="notification-badge" *ngIf="currentCount > 0">
+      <div class="position-relative">
+        <i class="fas fa-bell fs-5 text-warning" routerLink="/notifications"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger small" *ngIf="currentCount > 0">
           {{ currentCount > 99 ? '99+' : currentCount }}
         </span>
       </div>
-      <i class="fas fa-user fs-5" routerLink="/menu"></i>
+      <i class="fas fa-user fs-5 text-warning" routerLink="/menu"></i>
     </div>
   </header>
 </ng-container>
 
 <ng-template #defaultHeader>
-  <header class="header d-flex align-items-center flex-column w-100">
+  <header class="d-flex align-items-center flex-column w-100">
     <div class="d-flex w-100 justify-content-between align-items-center mb-2">
       <div class="d-flex align-items-center">
         <a
           (click)="goBack()"
-          class="back-button d-flex align-items-center justify-content-center"
+          class="d-flex align-items-center justify-content-center rounded-circle bg-dark bg-opacity-10 me-3 text-decoration-none"
+          style="width: 2rem; height: 2rem;"
           [routerLink]="routeNameBack ? routeNameBack : null"
         >
-          <i class="fas fa-solid fa-chevron-left fs-6"></i>
+          <i class="fas fa-chevron-left fs-6 text-warning"></i>
         </a>
-        <h1 class="header-title font-family-league-spartan mb-0">{{ title }}</h1>
+        <h1 class="font-family-league-spartan mb-0 fs-4 fw-bold text-white">{{ title }}</h1>
       </div>
-      <i *ngIf="hasHome" [routerLink]="routeName" class="fa-solid fa-house fs-5"></i>
+      <i *ngIf="hasHome" [routerLink]="routeName" class="fa-solid fa-house fs-5 text-warning"></i>
     </div>
   </header>
 </ng-template>

@@ -1,8 +1,5 @@
 .challenge-card {
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 6.875rem;
 
   &.difficulty-beginner-background {
     background-color: #c6e4d2;
@@ -16,25 +13,31 @@
     background-color: #ffd5ba;
   }
 
-  .challenge-title,
-  .challenge-description {
-    font-size: 0.7rem;
-    color: #666;
-    line-height: 1;
+  .challenge-content {
+    width: 55%;
+    z-index: 1;
   }
 
   .challenge-title {
-    font-size: 16px;
+    font-size: 1rem;
     color: #333;
   }
 
+  .challenge-description {
+    font-size: 0.75rem;
+    color: #666;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
   .difficulty {
-    font-size: 8px;
+    font-size: 0.5625rem;
   }
 
   .dificulty-container {
-    border-radius: 13px;
-    padding: 8px;
     width: fit-content;
 
     &.difficulty-beginner-tag {
@@ -49,8 +52,66 @@
       background-color: #ff4800;
     }
   }
+  
+  .challenge-image-container {
+    width: 45%;
+    
+    .challenge-image {
+      object-fit: cover;
+    }
+  }
+}
 
-  .challenge-image {
-    border-radius: 0 20px 20px 0;
+@media (max-width: 768px) {
+  .challenge-card {
+    .challenge-content {
+      width: 60%;
+    }
+    
+    .challenge-image-container {
+      width: 40%;
+    }
+    
+    .challenge-title {
+      font-size: 0.875rem;
+    }
+    
+    .challenge-description {
+      font-size: 0.7rem;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .challenge-card {
+    height: 5.5rem;
+    
+    .challenge-content {
+      width: 65%;
+    }
+    
+    .challenge-image-container {
+      width: 35%;
+    }
+    
+    .challenge-title {
+      font-size: 0.75rem;
+    }
+    
+    .challenge-description {
+      font-size: 0.625rem;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+    
+    .dificulty-container {
+      padding: 0.15rem 0.3rem;
+    }
+    
+    .difficulty {
+      font-size: 0.5rem;
+    }
   }
 }

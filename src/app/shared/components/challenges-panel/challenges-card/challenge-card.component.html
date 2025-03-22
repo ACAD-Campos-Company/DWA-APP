@@ -1,49 +1,51 @@
 <div
-  class="challenge-card d-grid"
+  class="challenge-card rounded-4 overflow-hidden shadow-sm mb-4"
   [ngClass]="{
     'difficulty-beginner-background': challenge.difficulty === '1',
     'difficulty-intermediate-background': challenge.difficulty === '2',
     'difficulty-advanced-background': challenge.difficulty === '3'
   }"
 >
-  <div class="d-flex flex-column justify-content-around p-3">
-    <div
-      class="dificulty-container"
-      [ngClass]="{
-        'difficulty-beginner-tag': challenge.difficulty === '1',
-        'difficulty-intermediate-tag': challenge.difficulty === '2',
-        'difficulty-background-tag': challenge.difficulty === '3'
-      }"
-    >
-      <p class="difficulty text-white text-center mb-0 fw-bold">
-        {{
-          challenge.difficulty === "1"
-            ? "INICIANTE"
-            : challenge.difficulty === "2"
-            ? "INTERMEDIÁRIO"
-            : "AVANÇADO"
-        }}
+  <div class="card-container d-flex h-100 position-relative">
+    <div class="challenge-content d-flex flex-column px-3 py-2">
+      <div
+        class="dificulty-container rounded-pill py-1 px-2 mb-1"
+        [ngClass]="{
+          'difficulty-beginner-tag': challenge.difficulty === '1',
+          'difficulty-intermediate-tag': challenge.difficulty === '2',
+          'difficulty-background-tag': challenge.difficulty === '3'
+        }"
+      >
+        <p class="difficulty text-white text-center mb-0 fw-bold text-nowrap">
+          {{
+            challenge.difficulty === "1"
+              ? "INICIANTE"
+              : challenge.difficulty === "2"
+              ? "INTERMEDIÁRIO"
+              : "AVANÇADO"
+          }}
+        </p>
+      </div>
+
+      <h2 class="challenge-title fw-bold font-family-poppins text-truncate mb-1">{{ challenge.name.toUpperCase() }}</h2>
+
+      <p class="challenge-description font-family-poppins mb-0">
+        {{ challenge.description }}
       </p>
     </div>
 
-    <h2 class="challenge-title mb-1 fw-bold font-family-poppins">{{ challenge.name.toUpperCase() }}</h2>
-
-    <p class="challenge-description mb-1 font-family-poppins">
-      {{ challenge.description }}
-    </p>
-  </div>
-
-  <div class="challenge-image w-100 h-100 overflow-hidden">
-    <img
-      class="w-100 h-100"
-      [src]="
-        challenge.difficulty === '3'
-          ? 'assets/backgrounds/challenge-hard-background.png'
-          : challenge.difficulty === '2'
-          ? 'assets/backgrounds/challenge-intermediate-background.png'
-          : 'assets/backgrounds/challenge-beginner-background.png'
-      "
-      [alt]="challenge.name"
-    />
+    <div class="challenge-image-container overflow-hidden h-100">
+      <img
+        class="challenge-image w-100 h-100 object-fit-cover"
+        [src]="
+          challenge.difficulty === '3'
+            ? 'assets/backgrounds/challenge-hard-background.png'
+            : challenge.difficulty === '2'
+            ? 'assets/backgrounds/challenge-intermediate-background.png'
+            : 'assets/backgrounds/challenge-beginner-background.png'
+        "
+        [alt]="challenge.name"
+      />
+    </div>
   </div>
 </div>
