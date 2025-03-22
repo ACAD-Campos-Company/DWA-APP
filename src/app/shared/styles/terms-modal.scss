@@ -1,0 +1,45 @@
+.swal2-popup {
+  background-color: #202325 !important;
+
+  .swal2-title {
+    color: #ffffff !important;
+    font-family: "League Spartan", sans-serif;
+    margin-bottom: 1rem;
+  }
+
+  .swal2-html-container {
+    color: #ffffff !important;
+    text-align: left;
+  }
+
+  .swal2-close {
+    color: #ffffff !important;
+  }
+
+  .swal2-confirm {
+    background-color: #ff8800 !important;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2a2e30;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #3f4448;
+    border-radius: 4px;
+  }
+}
+
+.terms-section {
+  background-color: #1e1e1e;
+  padding: 1rem;
+
+  &:first-of-type {
+    border-radius: 16px 16px 0 0;
+  }
+
+  &:last-of-type {
+    border-radius: 0 0 16px 16px;
+  }
+}

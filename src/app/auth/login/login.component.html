@@ -17,7 +17,7 @@
         [control]="$any(loginForm).controls['password']"
         class="mt-3"
       ></app-input>
-      <p class="error-message mt-3 mb-0 font-family-league-spartan" *ngIf="errorMessage$ | async as error">
+      <p class="text-danger mt-3 mb-0 font-family-league-spartan" *ngIf="errorMessage$ | async as error">
         {{ error }}
       </p>
     </form>

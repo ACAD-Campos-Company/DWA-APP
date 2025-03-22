@@ -17,6 +17,7 @@ export interface User {
   device_token?: string,
   device_os?: string,
   roles: Roles[]
+  formatted_roles?: string
 }
 export interface Roles {
   name: string,

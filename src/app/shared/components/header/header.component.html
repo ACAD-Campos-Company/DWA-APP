@@ -10,7 +10,7 @@
         Persistência hoje, resultados amanhã.
       </p>
       <p class="text-white fw-light fst-italic opacity-75 small mb-0" *ngIf="isAdmin">
-        {{ currentUser.roles[0].name }}
+        {{ currentUser.formatted_roles }}
       </p>
     </div>
     <div class="d-flex align-items-center gap-3">
