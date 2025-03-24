@@ -149,7 +149,7 @@ export class PushNotificationService {
   }
 
   getUserNotifications(): Observable<any> {
-    const endpoint = `${this.apiUrl}user-notification/${this.currentUser.id}`;
+    const endpoint = `${this.apiUrl}user-notifications/${this.currentUser.id}`;
     return this.http.get(endpoint);
   }
 

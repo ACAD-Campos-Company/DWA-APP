@@ -50,6 +50,6 @@
   </select>
 
   <div *ngIf="control.errors && control.touched && control.invalid && !showPasswordStrength">
-    <small class="text-danger">{{ control.errors | onlyOneError }}</small>
+    <p class="text-danger mb-0 font-family-league-spartan">{{ control.errors | onlyOneError }}</p>
   </div>
 </div>

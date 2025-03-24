@@ -67,6 +67,7 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
                 if (response.data.token) {
                     this.addOneToCache({ user: response.data.user, token: response.data.token });
                     this.tokenSubject.next(response.data.token);
+                    console.log('response.data.token', JSON.stringify(response.data.token));
                     localStorage.setItem('authToken', response.data.token);
                     localStorage.setItem('currentUser', JSON.stringify(response.data.user));
                     this.userEntityService.setCurrentUser(response.data.user);

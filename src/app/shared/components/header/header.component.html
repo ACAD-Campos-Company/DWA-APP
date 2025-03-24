@@ -1,10 +1,8 @@
 <ng-container *ngIf="homeMode; else defaultHeader">
-  <header
-    class="d-flex align-items-center justify-content-between mb-3"
-  >
+  <header class="d-flex align-items-start justify-content-between mb-3">
     <div>
       <h1 class="text-white font-family-poppins fw-bold mb-1 fs-5">
-        Oi, {{ currentUser.username }}!
+        Olá, {{ currentUser.username }}!
       </h1>
       <p class="text-white fw-light fst-italic opacity-75 small mb-0" *ngIf="!isAdmin">
         Persistência hoje, resultados amanhã.
