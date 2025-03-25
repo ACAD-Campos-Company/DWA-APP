@@ -12,11 +12,11 @@ export class OnlyOneErrorPipe implements PipeTransform {
     }
 
     const errorKey = Object.keys(errors)[0];
-    const errorMessage = this.getError(errorKey, errors[errorKey]);
+    const errorMessage = this.getError(errorKey);
     return errorMessage;
   }
 
-  private getError(errorKey: string, errorValue: any): string {
+  private getError(errorKey: string): string {
     switch (errorKey) {
       case 'required':
         return 'Este campo é obrigatório';

@@ -26,7 +26,9 @@
         [required]="true"
         placeholder="(12) 98765-4321"
         mask="(00) 00000-0000"
+        [dropSpecialCharacters]="false"
         [control]="$any(firstAccessForm).controls['telephone']"
+        [showMaskTyped]="true"
       ></app-input>
 
       <app-input

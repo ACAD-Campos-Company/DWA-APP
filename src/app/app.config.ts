@@ -1,4 +1,4 @@
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, isDevMode, APP_INITIALIZER } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -9,10 +9,10 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { reducers } from './store';
 import { provideEntityData, withEffects } from '@ngrx/data';
+import { AppInitializerService } from './shared/services/app-initializer.service';
 
 import { TrainingDataService } from './store/training/training-data.service';
 import { EntityDataService } from '@ngrx/data';
-import { APP_INITIALIZER } from '@angular/core';
 import { routes } from './app.routes';
 import { entityConfig } from './entity-metadata';
 import { ExerciseDataService } from './store/exercise/exercise-data.service';
@@ -41,11 +41,22 @@ export function initializeEntityDataService(
   };
 }
 
+export function initializeApp(appInitializer: AppInitializerService) {
+  return () => appInitializer.initializeApp();
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([AuthInterceptor])),
     LoadingService,
+    AppInitializerService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppInitializerService],
+      multi: true
+    },
     provideStore({
         ...reducers,
         router: routerReducer

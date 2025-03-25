@@ -13,6 +13,8 @@
         type === 'password' ? (this.showPassword ? 'text' : 'password') : type
       "
       [mask]="mask"
+      [showMaskTyped]="showMaskTyped"
+      [dropSpecialCharacters]="dropSpecialCharacters"
       [name]="label"
       autocomplete="on"
       *ngIf="

@@ -4,7 +4,8 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { PushNotificationService } from '../../services/push-notification.service';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
 import { Notification } from '../../models/notification.model';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map, tap, BehaviorSubject } from 'rxjs';
+import { NotificationHandlerService } from '../../services/notification-handler.service';
 
 @Component({
   selector: 'app-notifications',
@@ -13,23 +14,61 @@ import { Observable, map, tap } from 'rxjs';
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent {
   unreadNotifications$: Observable<Notification[]>;
   readNotifications$: Observable<Notification[]>;
+  isMarkingAll = new BehaviorSubject<boolean>(false);
+  isMarkingAll$ = this.isMarkingAll.asObservable();
 
-  constructor(private pushNotificationService: PushNotificationService) {
+  constructor(
+    private pushNotificationService: PushNotificationService,
+    private notificationHandler: NotificationHandlerService
+  ) {
     this.unreadNotifications$ = this.pushNotificationService.notifications$.pipe(
-      map(notifications => notifications.filter(n => !n.read))
+      map(notifications => notifications.filter(n => !n.read).sort((a, b) => b.timestamp - a.timestamp))
     );
     
     this.readNotifications$ = this.pushNotificationService.notifications$.pipe(
-      map(notifications => notifications.filter(n => n.read))
+      map(notifications => notifications.filter(n => n.read).sort((a, b) => b.timestamp - a.timestamp))
     );
   }
 
-  ngOnInit() {}
+  handleNotificationClick(notification: Notification) {
+    if (!notification.read) {
+      this.pushNotificationService.markAsRead(notification.id).subscribe(() => {
+        this.handleNotificationType(notification);
+      });
+    } else {
+      this.handleNotificationType(notification);
+    }
+  }
 
   markAsRead(id: string) {
-    this.pushNotificationService.markAsRead(id);
+    this.pushNotificationService.markAsRead(id).subscribe();
+  }
+
+  markAllAsRead() {
+    this.isMarkingAll.next(true);
+    this.pushNotificationService.markAllAsRead().subscribe({
+      next: () => {
+        this.isMarkingAll.next(false);
+      },
+      error: () => {
+        this.isMarkingAll.next(false);
+      }
+    });
+  }
+
+  private handleNotificationType(notification: Notification) {
+    if (notification.type.toLowerCase() === 'training' || notification.type.toLowerCase() === 'general') {
+      return;
+    }
+    
+    this.notificationHandler.handleNotification({
+      type: notification.type,
+      title: notification.title,
+      body: notification.body,
+      image: notification.image
+    });
   }
 }

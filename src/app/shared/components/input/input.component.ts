@@ -34,6 +34,8 @@ export class InputComponent implements AfterContentInit, OnChanges {
   @Input() labelClass: string = '';
   @Input() borderless: boolean = false;
   @Input() showPasswordStrength: boolean = false;
+  @Input() showMaskTyped: boolean = false;
+  @Input() dropSpecialCharacters: boolean = true;
 
   @Output() input = new EventEmitter();
 

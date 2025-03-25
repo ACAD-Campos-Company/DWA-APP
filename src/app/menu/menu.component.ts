@@ -3,11 +3,10 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../shared/components/header/header.component';
 import { LoadingService } from '../shared/services/loading.service';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { User } from '../shared/models/users.model';
 import { AuthEntityService } from '../auth/store/auth-entity.service';
 import { UserEntityService } from '../store/user/user-entity.service';
-
 
 @Component({
   selector: 'app-menu',
@@ -29,10 +28,16 @@ export class MenuComponent {
   currentUser$: Observable<User> = this.userEntityService.currentUser$;
 
   logout(): void {
-    const logout$ = this.authEntityService.logout();
+    const logout$ = this.authEntityService.logout()
+      .pipe(finalize(() => {
+        this.router.navigate(['/login']);
+      }))
+      
 
     this.loadingService.showLoaderUntilCompleted(logout$).subscribe({
-      next: () => {
+      error: (error) => {
+        console.error('Erro ao fazer logout:', error);
+        this.authEntityService.clearAuthData();
         this.router.navigate(['/login']);
       }
     });

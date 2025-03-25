@@ -1,15 +1,30 @@
 <app-header title="Notificações"></app-header>
 
-<div>
+<div class="notifications-container">
   <div class="notifications-section">
-    <h3 class="section-title mb-3 text-white fw-semibold">Não lidas</h3>
+    <div class="section-header d-flex justify-content-between align-items-center mb-3">
+      <h3 class="section-title text-white fw-semibold">Não lidas</h3>
+      <button 
+        class="btn btn-outline-light d-flex align-items-center gap-2" 
+        (click)="markAllAsRead()" 
+        [disabled]="(unreadNotifications$ | async)?.length === 0 || (isMarkingAll$ | async)"
+      >
+        <i class="bi bi-check2-all"></i>
+        <span *ngIf="!(isMarkingAll$ | async)">Marcar todas como lidas</span>
+        <span *ngIf="isMarkingAll$ | async">Marcando...</span>
+      </button>
+    </div>
     <ng-container *ngIf="unreadNotifications$ | async">
       <app-notification-card
         *ngFor="let notification of unreadNotifications$ | async"
         [title]="notification.title"
         [body]="notification.body"
         [read]="false"
-        (onClose)="markAsRead(notification.id)"
+        [imageUrl]="notification.image"
+        [type]="notification.type"
+        [timestamp]="notification.timestamp"
+        (onClose)="$event.stopPropagation(); markAsRead(notification.id)"
+        (click)="handleNotificationClick(notification)"
       >
       </app-notification-card>
     </ng-container>
@@ -29,6 +44,10 @@
         [title]="notification.title"
         [body]="notification.body"
         [read]="true"
+        [imageUrl]="notification.image"
+        [type]="notification.type"
+        [timestamp]="notification.timestamp"
+        (click)="handleNotificationClick(notification)"
       >
       </app-notification-card>
     </ng-container>

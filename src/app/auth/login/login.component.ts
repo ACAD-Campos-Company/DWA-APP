@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         next: ({ data: { user, token } }) => {
           this.authEntityService.setTokenFromStorage(token, user);
           
-          if (!user.last_login) {
+          if (user.first_access) {
             this.router.navigateByUrl(`/first-access/${user.id}`);
           } else {
             this.router.navigateByUrl('/on-boarding');

@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
-import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, shareReplay, interval, Subscription, startWith, takeUntil, Subject, tap } from 'rxjs';
 import { App } from '@capacitor/app';
 import { Notification } from '../models/notification.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserEntityService } from '../../store/user/user-entity.service';
 import { User } from '../models/users.model';
+import { NotificationHandlerService } from './notification-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,153 +16,182 @@ import { User } from '../models/users.model';
 export class PushNotificationService {
   private http = inject(HttpClient);
   private readonly userEntityService = inject(UserEntityService);
+  private readonly notificationHandler = inject(NotificationHandlerService);
 
   private currentUser!: User;
   private notifications = new BehaviorSubject<Notification[]>([]);
   private unreadCount = new BehaviorSubject<number>(0);
   private apiUrl = environment.api;
+  private refreshInterval = 30000;
+  private pollingSubscription!: Subscription;
+  private destroy$ = new Subject<void>();
 
   notifications$ = this.notifications.asObservable();
   unreadCount$ = this.unreadCount.asObservable();
 
   async initPush() {
-    this.userEntityService.currentUser$.subscribe(user => {
+    this.userEntityService.currentUser$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(user => {
       this.currentUser = user;
+      user.id ? this.startPolling() : this.stopPolling();
+    });
 
-      if (user.id) {
+    if (Capacitor.getPlatform() === 'android') {
+      await this.setupAndroidPushNotifications();
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.stopPolling();
+  }
+
+  private startPolling() {
+    this.stopPolling();
+    this.updateUserNotifications();
+    
+    this.pollingSubscription = interval(this.refreshInterval)
+      .pipe(startWith(0), takeUntil(this.destroy$))
+      .subscribe(() => this.updateUserNotifications());
+  }
+
+  private stopPolling() {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+    }
+  }
+
+  private async setupAndroidPushNotifications() {
+    try {
+      const permStatus = await PushNotifications.checkPermissions();
+      if (permStatus.receive === 'prompt' || permStatus.receive === 'prompt-with-rationale') {
+        const perm = await PushNotifications.requestPermissions();
+        if (perm.receive !== 'granted') return;
+      }
+
+      await PushNotifications.register();
+      this.setupNotificationListeners();
+    } catch (e) {
+      console.error('Erro ao inicializar push notifications:', e);
+    }
+  }
+
+  private setupNotificationListeners() {
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive && this.currentUser?.id) {
         this.updateUserNotifications();
       }
     });
 
-    await this.setPushNotifications();
+    PushNotifications.addListener('registration', (token) => {
+      this.registerDeviceToken(token.value);
+    });
+
+    PushNotifications.addListener('pushNotificationReceived', (notification) => {
+      this.handleIncomingNotification(notification);
+    });
+
+    PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+      this.handleIncomingNotification(action.notification);
+    });
   }
 
-  private saveNotifications(notifications: Notification[]) {
-    console.log('Notificações salvas:', notifications);
-    this.notifications.next(notifications);
-    this.updateUnreadCount();
-  }
+  private handleIncomingNotification(notification: any) {
+    const newNotification: Notification = {
+      id: notification.id || Date.now().toString(),
+      title: notification.data?.title || notification.title || 'Nova notificação',
+      body: notification.data?.body || notification.body || 'Você recebeu uma nova notificação',
+      read: false,
+      timestamp: Date.now(),
+      type: notification.data?.type || 'general',
+      image: notification.data?.image
+    };
 
-  private updateUnreadCount() {
-    const unread = this.notifications.value.filter(n => !n.read).length;
-    this.unreadCount.next(unread);
-    console.log('Contador atualizado:', unread);
+    this.addNotification(newNotification);
   }
 
   private addNotification(notification: Notification) {
     const currentNotifications = this.notifications.value;
-    const exists = currentNotifications.some(n => n.id === notification.id);
-    console.log('Notificação adicionada:', notification);
-    if (!exists) {
-      const updatedNotifications = [notification, ...currentNotifications];
-      this.saveNotifications(updatedNotifications);
+    if (!currentNotifications.some(n => n.id === notification.id)) {
+      this.saveNotifications([notification, ...currentNotifications]);
+      this.notificationHandler.handleNotification({
+        type: notification.type,
+        title: notification.title,
+        body: notification.body,
+        image: notification.image
+      });
     }
   }
 
-  private async setPushNotifications() {
-    if (Capacitor.getPlatform() === 'android') {
-      try {
-        const permStatus = await PushNotifications.checkPermissions();
-
-        if (permStatus.receive === 'prompt' || permStatus.receive === 'prompt-with-rationale') {
-          const perm = await PushNotifications.requestPermissions();
-          if (perm.receive !== 'granted') {
-            return;
-          }
-        }
-
-        await PushNotifications.register();
-
-        App.addListener('appStateChange', ({ isActive }) => {
-          if (isActive && this.currentUser?.id) {
-            this.updateUserNotifications();
-          }
-        });
-
-        PushNotifications.addListener('registration', (token) => {
-          this.registerDeviceToken(token.value);
-        });
-
-        PushNotifications.addListener('pushNotificationReceived', (notification) => {
-          console.log('Notificação raw recebida:', JSON.stringify(notification, null, 2));
-
-          const newNotification: Notification = {
-            id: notification.id || Date.now().toString(),
-            title: notification.data?.title || notification.title || 'Nova notificação',
-            body: notification.data?.body || notification.body || 'Você recebeu uma nova notificação',
-            read: false,
-            timestamp: Date.now()
-          };
-
-          this.addNotification(newNotification);
-        });
-
-        PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-          console.log('Notificação clicada:', JSON.stringify(action, null, 2));
-
-          const notification = action.notification;
-          const newNotification: Notification = {
-            id: notification.id || Date.now().toString(),
-            title: notification.data?.title || notification.title || 'Nova notificação',
-            body: notification.data?.body || notification.body || 'Você recebeu uma nova notificação',
-            read: false,
-            timestamp: Date.now()
-          };
-
-          this.addNotification(newNotification);
-        });
-
-      } catch (e) {
-        console.error('Erro ao inicializar push notifications:', e);
-      }
-    }
-  }
-
-  getNotifications() {
-    return this.notifications$;
+  private saveNotifications(notifications: Notification[]) {
+    this.notifications.next(notifications);
+    this.unreadCount.next(notifications.filter(n => !n.read).length);
   }
 
   markAsRead(id: string) {
-    const currentNotifications = this.notifications.value;
-    const updatedNotifications = currentNotifications.map(n =>
-      n.id === id ? { ...n, read: true } : n
+    return this.markMultipleAsRead([id]);
+  }
+
+  markMultipleAsRead(ids: string[]) {
+    const endpoint = `${this.apiUrl}user-notifications/${this.currentUser.id}/mark-as-read`;
+    return this.http.post(endpoint, { ids }).pipe(
+      tap(() => {
+        const updatedNotifications = this.notifications.value.map(n =>
+          ids.includes(n.id) ? { ...n, read: true } : n
+        );
+        this.saveNotifications(updatedNotifications);
+      })
     );
-    this.saveNotifications(updatedNotifications);
   }
 
   markAllAsRead() {
-    const currentNotifications = this.notifications.value;
-    const updatedNotifications = currentNotifications.map(n => ({ ...n, read: true }));
-    this.saveNotifications(updatedNotifications);
-  }
-
-  clearNotifications() {
-    this.saveNotifications([]);
+    const unreadIds = this.notifications.value
+      .filter(n => !n.read)
+      .map(n => n.id);
+    
+    return unreadIds.length > 0
+      ? this.markMultipleAsRead(unreadIds)
+      : this.http.post(`${this.apiUrl}user-notifications/${this.currentUser.id}/mark-as-read`, { ids: [] });
   }
 
   updateUserNotifications() {
+    this.destroy$.next();
     this.getUserNotifications().pipe(
+      takeUntil(this.destroy$),
       shareReplay(1)
-    ).subscribe((notifications) => {
-      console.log('Notificações atualizadas:', notifications);
+    ).subscribe((response: any) => {
+      if (!response.data) return;
+
+      const notifications = Array.isArray(response.data)
+        ? response.data.map(this.mapNotificationFromResponse)
+        : [this.mapNotificationFromResponse(response.data)];
+
       this.saveNotifications(notifications);
     });
   }
 
-  getUserNotifications(): Observable<any> {
-    const endpoint = `${this.apiUrl}user-notifications/${this.currentUser.id}`;
-    return this.http.get(endpoint);
+  private mapNotificationFromResponse(item: any): Notification {
+    return {
+      id: item.id.toString(),
+      title: item.notification?.title || 'Nova notificação',
+      body: item.notification?.message || 'Você recebeu uma nova notificação',
+      read: item.read,
+      timestamp: new Date(item.created_at).getTime(),
+      type: item.notification?.type || 'general',
+      image: item.notification?.image
+    };
   }
 
-  registerDeviceToken(token: string) {
+  private getUserNotifications(): Observable<any> {
+    return this.http.get(`${this.apiUrl}user-notifications/${this.currentUser.id}`);
+  }
+
+  private registerDeviceToken(token: string) {
     this.userEntityService.sendTokenStorage(token, Capacitor.getPlatform()).subscribe({
-      next: () => {
-        console.log('Token registrado com sucesso');
-      },
-      error: (error) => {
-        console.error('Erro ao registrar token:', JSON.stringify(error));
-      }
+      next: () => console.log('Token registrado com sucesso'),
+      error: (error) => console.error('Erro ao registrar token:', JSON.stringify(error))
     });
   }
-
 }

@@ -1,0 +1,56 @@
+.notification-popup {
+  background-color: #202325 !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+
+  .notification-title {
+    color: #ffffff !important;
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-muted {
+    color: #a0a0a0 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .notification-button {
+    font-family: "League Spartan", sans-serif !important;
+    font-size: 1rem !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+  }
+}
+
+.birthday-theme {
+  .notification-button {
+    background-color: #FF8800 !important;
+    color: #ffffff !important;
+  }
+}
+
+.success-theme {
+  .notification-title {
+    color: #4CAF50 !important;
+  }
+}
+
+.error-theme {
+  .notification-title {
+    color: #f44336 !important;
+  }
+}
+
+.general-theme {
+  .notification-button {
+    background-color: #FF8800 !important;
+    color: #ffffff !important;
+  }
+} 

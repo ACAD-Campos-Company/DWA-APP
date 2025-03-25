@@ -7,12 +7,13 @@ import { LoadingComponent } from "../../shared/components/loading/loading.compon
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { encodePasswordFields, passwordMatchValidator, passwordStrengthValidator } from '../../shared/utils/validators/password.validator';
-import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, of, tap } from 'rxjs';
 import { AuthEntityService } from '../store/auth-entity.service';
 import { UserEntityService } from '../../store/user/user-entity.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { TermsService } from '../../shared/services/terms.service';
+import { User } from '../../shared/models/users.model';
 
 @Component({
   selector: 'app-first-login',
@@ -35,6 +36,7 @@ export class FirstAccessComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly userEntityService = inject(UserEntityService);
   private readonly termsService = inject(TermsService);
+  private readonly loadingService = inject(LoadingService);
 
   private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
   readonly errorMessage$ = this.errorMessageSubject.asObservable();
@@ -44,7 +46,10 @@ export class FirstAccessComponent implements OnInit {
 
   firstAccessForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
-    telephone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\) \d{5}-\d{4}$/)]],
+    telephone: ['', [
+      Validators.required, 
+      Validators.pattern(/^\([1-9]{2}\) (?:9[1-9]|[2-8])[0-9]{3}-[0-9]{4}$/)
+    ]],
     email: ['', [Validators.email]],
     password: ['', [
       Validators.required, 
@@ -65,32 +70,35 @@ export class FirstAccessComponent implements OnInit {
   }
 
   private loadUserData(): void {
-    if (this.userId) {
-      this.userEntityService.getByKey(Number(this.userId)).subscribe(
-        user => this.populateForm(user)
-      );
-    } else {
-      const currentUser = this.userEntityService.getCurrentUser();
-      if (currentUser) {
-        this.populateForm(currentUser);
-      }
+    if (!this.userId) {
+      this.errorMessageSubject.next('ID do usuário não encontrado.');
+      return;
+    }
+
+    const currentUser = this.userEntityService.getCurrentUser();
+    if (currentUser) {
+      this.populateForm(currentUser);
     }
   }
 
-  private populateForm(user: any): void {
+  private populateForm(user: User): void {
     if (!user) return;
 
-    if (user.username) {
-      this.firstAccessForm.get('username')?.setValue(user.username);
-    }
-    
-    if (user.telephone) {
-      this.firstAccessForm.get('telephone')?.setValue(user.telephone);
-    }
-    
-    if (user.email) {
-      this.firstAccessForm.get('email')?.setValue(user.email);
-    }
+    const formControls = {
+      username: user.username || '',
+      telephone: user.telephone || '',
+      email: user.email || '',
+    };
+
+    Object.keys(formControls).forEach(key => {
+      const control = this.firstAccessForm.get(key);
+      if (control && formControls[key as keyof typeof formControls]) {
+        control.setValue(formControls[key as keyof typeof formControls]);
+        if (key !== 'email') { // Email é opcional
+          control.markAsTouched();
+        }
+      }
+    });
   }
 
   onSubmit(): void {
@@ -110,9 +118,10 @@ export class FirstAccessComponent implements OnInit {
       'password_confirmation',
     ]);
 
-    const updateData = {
+    const updateData: User = {
       id: Number(this.userId),
-      ...formValues
+      ...formValues,
+      first_access: false
     };
 
     this.updateUser(updateData);
@@ -124,7 +133,8 @@ export class FirstAccessComponent implements OnInit {
     });
   }
 
-  private updateUser(updateData: any): void {
+  private updateUser(updateData: User): void {
+    this.loadingService.loadingOn();
     this.userEntityService.update(updateData).pipe(
       tap(() => {
         this.errorMessageSubject.next(null);
@@ -134,7 +144,8 @@ export class FirstAccessComponent implements OnInit {
       catchError((err: HttpErrorResponse) => {
         this.errorMessageSubject.next(err.error?.message || 'Erro inesperado.');
         return of(null);
-      })
+      }),
+      finalize(() => this.loadingService.loadingOff())
     ).subscribe();
   }
 
