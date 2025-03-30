@@ -1,33 +1,41 @@
 <app-header title="Meus dados" [hasHome]="true"></app-header>
 
 <div class="mt-4">
-  <form class="d-flex flex-column gap-3" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <form
+    class="d-flex flex-column gap-3"
+    [formGroup]="userForm"
+    (ngSubmit)="onSubmit()"
+  >
     <app-input
       label="CPF"
       [control]="$any(userForm).controls['document']"
       mask="000.000.000-00"
-      [required]="true">
+      [required]="true"
+    >
     </app-input>
 
     <app-input
-      label="Como gostaria de  ser chamado?"
+      label="Como você gostaria de ser chamado?"
       [control]="$any(userForm).controls['username']"
       placeholder="exemplo: paulo"
-      [required]="true">
+      [required]="true"
+    >
     </app-input>
 
     <app-input
       label="Seu telefone para contato"
       [control]="$any(userForm).controls['telephone']"
       mask="(00) 00000-0000"
-      [required]="true">
+      [required]="true"
+    >
     </app-input>
 
     <app-input
       label="Seu melhor e-mail"
       [control]="$any(userForm).controls['email']"
       type="email"
-      placeholder="paulo@email.com.br">
+      placeholder="paulo@email.com.br"
+    >
       <small>(opcional)</small>
     </app-input>
 
@@ -43,14 +51,16 @@
       [control]="$any(userForm).controls['gender']"
       type="combo"
       [options]="genderOptions"
-      placeholder="selecionar">
+      placeholder="selecionar"
+    >
     </app-input>
 
     <app-button
       class="mt-4"
       label="SALVAR ALTERAÇÕES"
       [disabled]="!userForm.valid"
-      (clicked)="onSubmit()">
+      (clicked)="onSubmit()"
+    >
     </app-button>
   </form>
 </div>
