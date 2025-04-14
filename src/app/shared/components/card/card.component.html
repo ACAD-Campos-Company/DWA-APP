@@ -2,9 +2,11 @@
   class="card-container"
   [ngClass]="{ 'card-large': size === 'large', 'card-small': size === 'small' }"
 >
-  <img [src]="imageSrc" alt="Imagem de perfil" class="card-image w-100" />
+  <div class="card-image-container w-100">
+    <img [src]="imageSrc" alt="Imagem de perfil" class="card-image w-100" />
+  </div>
   <div class="information d-flex justify-content-between flex-column">
-    <h2 class="title fw-semibold">{{ title }}</h2>
+    <h2 class="title fw-semibold text-nowrap">{{ title }}</h2>
     <div
       class="d-flex mt-3 align-items-center"
       [ngClass]="{

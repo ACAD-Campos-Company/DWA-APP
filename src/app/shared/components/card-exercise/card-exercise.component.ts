@@ -26,11 +26,6 @@ export class CardExerciseComponent {
   }
 
   viewExercise(exercise: Exercise): void {
-    this.store.dispatch(ExerciseViewActions.setExercises({
-      exercises: [exercise],
-      source: 'training',
-      selectedExerciseId: exercise.id
-    }));
     this.router.navigate(['/general/exercise-view']);
   }
 }

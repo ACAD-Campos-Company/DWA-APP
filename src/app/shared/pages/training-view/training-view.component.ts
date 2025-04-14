@@ -142,7 +142,7 @@ export class TrainingViewComponent implements OnInit {
     this.store.dispatch(ExerciseViewActions.setExercises({
       exercises: (this.getTraining().exercises || this.getTraining().training_exercises),
       selectedExerciseId: exercise.id,
-      source: 'user-training'
+      source: 'training'
     }));
 
     this.router.navigate(['/general/exercise-view']);
