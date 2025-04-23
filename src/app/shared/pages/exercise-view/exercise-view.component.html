@@ -1,16 +1,16 @@
-<div class="h-100" *ngIf="exercise$ | async as exercise">
+<div class="exercise-view-container" *ngIf="exercise$ | async as exercise">
   <app-header title="Exercício" [hasHome]="true"></app-header>
   <div class="view-container d-flex w-100 justify-content-center">
     <div class="d-flex flex-column justify-content-around w-100 align-items-start">
-      <div class="w-100 text-center mb-3">
+      <div class="w-100 text-center">
         <h3 class="font-family-poppins fw-semibold">{{ exercise.exercise_name || exercise.name }}</h3>
       </div>
 
-      <div class="exercise-image-container border border-warning rounded d-flex flex-column justify-content-center align-items-center p-3 mb-3 w-100">
+      <div class="exercise-image-container rounded d-flex flex-column justify-content-center align-items-center p-3 w-100">
         <img
           [src]="exercise.image || 'assets/images/default-trained-muscles.png'"
           alt="Exercise Image"
-          class="img-fluid rounded mb-2 w-100"
+          class="img-fluid rounded w-100"
         />
       </div>
 

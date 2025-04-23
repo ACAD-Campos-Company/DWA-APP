@@ -24,12 +24,30 @@ export class ExerciseViewEffects {
       if (!repetitionId) return EMPTY;
 
       return this.exerciseService.updateRepetitionWeight(userExerciseId, weight, repetitionId).pipe(
-        map((response) => ExerciseViewActions.updateRepetitionWeightSuccess({
-          userExerciseId,
-          weight,
-          repetitionId,
-          updatedRepetition: response.data
-        }))
+        map((response) => {
+          // Update the state immediately
+          const updatedExercises = state.exercises.map(exercise => {
+            const hasRepetition = exercise.repetitions.some(rep => rep.id === repetitionId);
+            
+            if (!hasRepetition) return exercise;
+            
+            return {
+              ...exercise,
+              repetitions: exercise.repetitions.map(rep => 
+                rep.id === repetitionId ? { ...rep, weight } : rep
+              )
+            };
+          });
+
+          // Dispatch both the success action and update the state
+          return ExerciseViewActions.updateRepetitionWeightSuccess({
+            userExerciseId,
+            weight,
+            repetitionId,
+            updatedRepetition: response.data,
+            updatedExercises
+          });
+        })
       );
     })
   ));

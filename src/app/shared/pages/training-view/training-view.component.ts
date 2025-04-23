@@ -18,6 +18,7 @@ import { formatDuration } from '../../utils/helpers/duration.helper';
 import { AppState } from '../../../store';
 import { TrainingViewEntityService } from '../../../store/training-view/training-view-entity.service';
 import { UserEntityService } from '../../../store/user/user-entity.service';
+import { selectExerciseViewState } from '../../../store/exercise-view/exercise-view.selectors';
 
 
 
@@ -139,8 +140,28 @@ export class TrainingViewComponent implements OnInit {
 
   async onExerciseClick(exercise: Exercise): Promise<void> {
     if ((await firstValueFrom(this.isOtherTrainingActive$)) === true) return;
+    
+    const training = this.getTraining();
+    const exercises = training.exercises || training.training_exercises;
+    
+    const currentState = await firstValueFrom(this.store.select(selectExerciseViewState));
+    
+    const updatedExercises = exercises.map(newExercise => {
+      const existingExercise = currentState.exercises.find(e => e.id === newExercise.id);
+      if (existingExercise && newExercise.repetitions.length > 0) {
+        return {
+          ...newExercise,
+          repetitions: newExercise.repetitions.map(newRep => {
+            const existingRep = existingExercise.repetitions.find(r => r.id === newRep.id);
+            return existingRep ? { ...newRep, weight: existingRep.weight } : newRep;
+          })
+        };
+      }
+      return newExercise;
+    });
+
     this.store.dispatch(ExerciseViewActions.setExercises({
-      exercises: (this.getTraining().exercises || this.getTraining().training_exercises),
+      exercises: updatedExercises,
       selectedExerciseId: exercise.id,
       source: 'training'
     }));

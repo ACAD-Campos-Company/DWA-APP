@@ -39,7 +39,6 @@ export class ExerciseViewComponent {
   private readonly store = inject(Store<AppState>);
   private readonly trainingStateService = inject(TrainingStateService);
   private readonly userService = inject(UserEntityService);
-  private readonly exerciseService = inject(ExerciseService);
 
   public readonly exerciseViewService = inject(ExerciseViewService);
   public readonly restTimer = inject(RestTimerService);

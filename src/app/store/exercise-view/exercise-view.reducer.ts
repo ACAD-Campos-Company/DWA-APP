@@ -106,23 +106,8 @@ export const exerciseViewReducer = createReducer(
       };
     })
   })),
-  on(ExerciseViewActions.updateRepetitionWeightSuccess, (state, { updatedRepetition, repetitionId, weight }) => {
-    const updatedExercises = state.exercises.map(exercise => {
-      const hasRepetition = exercise.repetitions.some(rep => rep.id === repetitionId);
-      
-      if (!hasRepetition) return exercise;
-      
-      return {
-        ...exercise,
-        repetitions: exercise.repetitions.map(rep => 
-          rep.id === repetitionId ? { ...rep, weight } : rep
-        )
-      };
-    });
-
-    return {
-      ...state,
-      exercises: updatedExercises
-    };
-  })
+  on(ExerciseViewActions.updateRepetitionWeightSuccess, (state, { updatedExercises }) => ({
+    ...state,
+    exercises: updatedExercises
+  }))
 );

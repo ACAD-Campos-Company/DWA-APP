@@ -1,7 +1,24 @@
 <app-header title="Notificações"></app-header>
 
 <div class="notifications-container">
-  <div class="notifications-section">
+  <div class="notification-tabs mb-4">
+    <button 
+      class="tab-button button-left" 
+      [class.active]="activeTab === 'read'"
+      (click)="setActiveTab('read')"
+    >
+      Lidas
+    </button>
+    <button 
+      class="tab-button button-right" 
+      [class.active]="activeTab === 'unread'"
+      (click)="setActiveTab('unread')"
+    >
+      Não lidas
+    </button>
+  </div>
+
+  <div class="notifications-section" *ngIf="activeTab === 'unread'">
     <div class="section-header d-flex justify-content-between align-items-center mb-3">
       <h3 class="section-title text-white fw-semibold">Não lidas</h3>
       <button 
@@ -36,7 +53,7 @@
     </div>
   </div>
 
-  <div class="notifications-section">
+  <div class="notifications-section" *ngIf="activeTab === 'read'">
     <h3 class="section-title mb-3 text-white fw-semibold">Lidas</h3>
     <ng-container *ngIf="readNotifications$ | async">
       <app-notification-card

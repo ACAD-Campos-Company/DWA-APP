@@ -4,7 +4,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { PushNotificationService } from '../../services/push-notification.service';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
 import { Notification } from '../../models/notification.model';
-import { Observable, map, tap, BehaviorSubject } from 'rxjs';
+import { Observable, map, BehaviorSubject } from 'rxjs';
 import { NotificationHandlerService } from '../../services/notification-handler.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class NotificationsComponent {
   readNotifications$: Observable<Notification[]>;
   isMarkingAll = new BehaviorSubject<boolean>(false);
   isMarkingAll$ = this.isMarkingAll.asObservable();
+  activeTab: 'read' | 'unread' = 'unread';
 
   constructor(
     private pushNotificationService: PushNotificationService,
@@ -70,5 +71,9 @@ export class NotificationsComponent {
       body: notification.body,
       image: notification.image
     });
+  }
+
+  setActiveTab(tab: 'read' | 'unread') {
+    this.activeTab = tab;
   }
 }

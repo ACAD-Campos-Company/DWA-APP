@@ -1,8 +1,11 @@
+.exercise-view-container {
+  height: 100vh;
+}
+
 .view-container {
   padding: 1rem;
   background-color: white;
   border-radius: 1.25rem;
-  height: 100%;
 
   .information-container {
     grid-template-rows: 50px;

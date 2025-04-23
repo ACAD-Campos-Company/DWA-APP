@@ -69,12 +69,26 @@ export class NotificationHandlerService {
   private handleImageNotification(notification: { title: string; body: string, image: string }) {
     Swal.fire({
       title: notification.title,
-      text: notification.body,
-      imageUrl: notification.image,
-      confirmButtonText: 'Ok!',
-      confirmButtonColor: '#FF8800',
+      html: `
+        <div class="d-flex flex-column">
+          <div class="rounded-4 overflow-hidden mb-4">
+            <img src="${notification.image}" class="img-fluid w-100" alt="${notification.title}">
+          </div>
+          <p class="text-white" style="font-style: italic;">${notification.body}</p>
+        </div>
+      `,
+      showConfirmButton: true,
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#D4A056',
       background: '#202325',
       color: '#ffffff',
+      width: '32rem',
+      padding: '2rem',
+      customClass: {
+        popup: 'rounded-4',
+        title: 'fs-2 mb-3',
+        confirmButton: 'btn btn-lg px-5 rounded-pill'
+      }
     });
   }
 } 

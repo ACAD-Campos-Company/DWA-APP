@@ -1,56 +1,46 @@
 .notification-popup {
   background-color: #202325 !important;
   border-radius: 16px !important;
-  padding: 2rem !important;
-
-  .notification-title {
+  
+  .swal2-title {
     color: #ffffff !important;
     font-family: "League Spartan", sans-serif;
-    font-size: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
+    font-size: 2rem !important;
+    margin-bottom: 1rem !important;
+    
+    &.notification-title {
+      font-weight: 600;
+    }
   }
-
-  .text-center {
-    text-align: center;
+  
+  .swal2-html-container {
+    margin: 0 !important;
+    
+    p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin: 0;
+    }
   }
-
-  .text-muted {
-    color: #a0a0a0 !important;
-    font-size: 1.1rem !important;
-    line-height: 1.5 !important;
-  }
-
-  .notification-button {
+  
+  .swal2-confirm {
+    background-color: #D4A056 !important;
     font-family: "League Spartan", sans-serif !important;
-    font-size: 1rem !important;
-    padding: 0.75rem 2rem !important;
-    border-radius: 8px !important;
-    transition: all 0.3s ease !important;
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    padding: 0.75rem 3rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    &:hover {
+      background-color: darken(#D4A056, 5%) !important;
+    }
+  }
+  
+  img {
+    border-radius: 12px;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
   }
 }
-
-.birthday-theme {
-  .notification-button {
-    background-color: #FF8800 !important;
-    color: #ffffff !important;
-  }
-}
-
-.success-theme {
-  .notification-title {
-    color: #4CAF50 !important;
-  }
-}
-
-.error-theme {
-  .notification-title {
-    color: #f44336 !important;
-  }
-}
-
-.general-theme {
-  .notification-button {
-    background-color: #FF8800 !important;
-    color: #ffffff !important;
-  }
-} 
