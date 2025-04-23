@@ -1,8 +1,7 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoadingService } from '../../shared/services/loading.service';
-import { encodePasswordFields, passwordMatchValidator } from '../../shared/utils/validators/password.validator';
-import { OnlyOneErrorPipe } from '../../shared/utils/pipes/only-one-error.pipe';
+import { encodePasswordFields, passwordMatchValidator, passwordStrengthValidator } from '../../shared/utils/validators/password.validator';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
@@ -25,8 +24,7 @@ import Swal from 'sweetalert2';
     LoadingComponent,
     ReactiveFormsModule,
     CommonModule,
-    RouterModule,
-    OnlyOneErrorPipe
+    RouterModule
   ],
   providers: [LoadingService, AuthEntityService]
 })
@@ -34,30 +32,25 @@ export class ResetPasswordComponent implements OnInit {
   @ViewChild('firstStepTemplate', { static: true }) firstStepTemplate!: TemplateRef<any>;
   @ViewChild('secondStepTemplate', { static: true }) secondStepTemplate!: TemplateRef<any>;
   @ViewChild('thirdStepTemplate', { static: true }) thirdStepTemplate!: TemplateRef<any>;
-  @ViewChild('fourthStepTemplate', { static: true }) fourthStepTemplate!: TemplateRef<any>;
 
-  firstStepForm: FormGroup = new FormGroup({});
-  secondStepForm: FormGroup = new FormGroup({});
-  thirdStepForm: FormGroup = new FormGroup({});
+  private readonly fb = inject(FormBuilder);
+  private readonly loadingService = inject(LoadingService);
+  private readonly authEntityService = inject(AuthEntityService);
+  private readonly router = inject(Router);
+
+  firstStepForm!: FormGroup;
+  secondStepForm!: FormGroup;
+  thirdStepForm!: FormGroup;
 
   currentStep: number = 1;
   userID: number = 0;
   token: string = '';
 
-  errorMessage = new BehaviorSubject<string | null>(null);
-  sentSmsMessage = new BehaviorSubject<string | null>(null);
-  userPhone = new BehaviorSubject<string | null>(null);
+  private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
+  private readonly userPhoneSubject = new BehaviorSubject<string | null>(null);
 
-  errorMessage$ = this.errorMessage.asObservable();
-  sentSmsMessage$ = this.sentSmsMessage.asObservable();
-  userPhone$ = this.userPhone.asObservable();
-
-  constructor(
-    private fb: FormBuilder,
-    private loadingService: LoadingService,
-    private authEntityService: AuthEntityService,
-    private route: Router
-  ) { }
+  readonly errorMessage$ = this.errorMessageSubject.asObservable();
+  readonly userPhone$ = this.userPhoneSubject.asObservable();
 
   ngOnInit(): void {
     this.initForms();
@@ -73,17 +66,19 @@ export class ResetPasswordComponent implements OnInit {
     });
 
     this.thirdStepForm = this.fb.group({
-      password: ['', [Validators.required]],
+      password: ['', [
+        Validators.required, 
+        Validators.minLength(8),
+        passwordStrengthValidator()
+      ]],
       password_confirmation: ['', [Validators.required]]
-    }, {
-      validators: [passwordMatchValidator()]
-    });
+    }, { validators: passwordMatchValidator() });
   }
 
   handleBackButtonClick(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
-      this.errorMessage.next(null);
+      this.errorMessageSubject.next(null);
     }
   }
 
@@ -125,12 +120,12 @@ export class ResetPasswordComponent implements OnInit {
 
     this.loadingService.showLoaderUntilCompleted(auth$).subscribe({
       next: (res: ForgotPasswordRes) => {
-        this.userPhone.next(this.formatPhoneNumber(res.data.telephone));
+        this.userPhoneSubject.next(this.formatPhoneNumber(res.data.telephone));
         this.userID = res.data.userID;
         this.currentStep++
-        this.errorMessage.next(null);
+        this.errorMessageSubject.next(null);
       },
-      error: (err) => this.errorMessage.next(err.error?.message || 'Erro inesperado.'),
+      error: (err) => this.errorMessageSubject.next(err.error?.message || 'Erro inesperado.'),
     });
   }
 
@@ -146,9 +141,9 @@ export class ResetPasswordComponent implements OnInit {
       next: (res: ForgotPasswordRes) => {
         this.token = res.data.token;
         this.currentStep++;
-        this.errorMessage.next(null);
+        this.errorMessageSubject.next(null);
       },
-      error: (err) => this.errorMessage.next(err.error?.message || 'Erro inesperado.'),
+      error: (err) => this.errorMessageSubject.next(err.error?.message || 'Erro inesperado.'),
     });
   }
 
@@ -179,15 +174,14 @@ export class ResetPasswordComponent implements OnInit {
         });
 
         setTimeout(() => {
-          this.route.navigateByUrl('login');
+          this.router.navigateByUrl('login');
         }, 1500);
       },
-      error: (err) => this.errorMessage.next(err.error?.message || 'Erro inesperado.'),
+      error: (err) => this.errorMessageSubject.next(err.error?.message || 'Erro inesperado.'),
     });
   }
 
   private formatPhoneNumber(phone: string): string {
-    const maskedPhone = phone.replace(/(\d{2})(\d{1})\d{4}(\d{4})/, '($1) $2****-$3');
-    return maskedPhone;
+    return phone.replace(/(\d{2})(\d{1})\d{4}(\d{4})/, '($1) $2****-$3');
   }
 }

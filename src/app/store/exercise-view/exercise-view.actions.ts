@@ -36,7 +36,13 @@ export const updateRepetitionWeight = createAction(
 );
 export const updateRepetitionWeightSuccess = createAction(
   '[Exercise View] Update Repetition Weight Success',
-  props<{ userExerciseId: number; weight: number; repetitionId: number; updatedRepetition: any }>()
+  props<{ 
+    userExerciseId: number; 
+    weight: number; 
+    repetitionId: number; 
+    updatedRepetition: any;
+    updatedExercises: any[];
+  }>()
 );
 
 export const completeExercise = createAction(

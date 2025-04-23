@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
 import { User } from '../../shared/models/users.model';
-import { Observable, tap, map, BehaviorSubject } from 'rxjs';
+import { Observable, tap, map, BehaviorSubject, of, finalize } from 'rxjs';
 import { AuthenticateLogin, ForgotPasswordRes } from '../../shared/models/authenticate.model';
 import { AuthDataService } from './auth-data.service';
 import { UserEntityService } from '../../store/user/user-entity.service';
@@ -18,12 +18,13 @@ interface AuthState {
 export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
     private tokenSubject = new BehaviorSubject<string>('');
     readonly token$ = this.tokenSubject.asObservable();
+    private initialized = false;
 
     readonly authState$ = this.entities$.pipe(
         map(entities => entities[0]),
         tap(state => {
             if (state?.token) {
-                this.tokenSubject.next(state.token);
+                this.setTokenFromStorage(state.token, state.user);
             }
         })
     );
@@ -37,27 +38,51 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
         private challengeEntityService: ChallengeEntityService,
     ) {
         super('Auth', serviceElementsFactory);
-        this.authState$.subscribe();
+        this.initializeAuth();
+    }
+
+    private initializeAuth(): void {
+        if (this.initialized) return;
         
         const storedToken = localStorage.getItem('authToken');
         const storedUser = localStorage.getItem('currentUser');
         
         if (storedToken && storedUser) {
-            const user = JSON.parse(storedUser);
-            this.setTokenFromStorage(storedToken, user);
+            try {
+                const user = JSON.parse(storedUser);
+                this.setTokenFromStorage(storedToken, user);
+            } catch (error) {
+                console.error('Error parsing stored user:', error);
+                this.clearAuthData();
+            }
         }
+        
+        this.initialized = true;
+        this.authState$.subscribe();
     }
 
     getToken(): string {
-        return this.tokenSubject.getValue();
+        let token = this.tokenSubject.getValue();
+        if (!token) {
+            token = localStorage.getItem('authToken') || '';
+            if (token) {
+                this.tokenSubject.next(token);
+            }
+        }
+        return token;
     }
     
     setTokenFromStorage(token: string, user?: User): void {
+        if (!token) return;
+        
         this.tokenSubject.next(token);
+        localStorage.setItem('authToken', token);
         
         if (user) {
             this.addOneToCache({ user, token });
+            localStorage.setItem('currentUser', JSON.stringify(user));
             this.userEntityService.setCurrentUser(user);
+            localStorage.setItem('isLoggedIn', 'true');
         }
     }
 
@@ -65,11 +90,7 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
         return this.authDataService.authenticate(credentials).pipe(
             tap((response: AuthenticateLogin) => {
                 if (response.data.token) {
-                    this.addOneToCache({ user: response.data.user, token: response.data.token });
-                    this.tokenSubject.next(response.data.token);
-                    localStorage.setItem('authToken', response.data.token);
-                    localStorage.setItem('currentUser', JSON.stringify(response.data.user));
-                    this.userEntityService.setCurrentUser(response.data.user);
+                    this.setTokenFromStorage(response.data.token, response.data.user);
                 }
             })
         );
@@ -77,18 +98,20 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
 
     logout(): Observable<void> {
         return this.authDataService.logout().pipe(
-            tap(() => {
-                this.tokenSubject.next('');
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('isLoggedIn');
-                this.clearCache();
-                this.userEntityService.clearUserState();
-                this.exerciseEntityService.clearCache();
-                this.trainingEntityService.clearCache();
-                this.challengeEntityService.clearCache();
-            })
+            finalize(() => this.clearAuthData())
         );
+    }
+
+    clearAuthData(): void {
+        this.tokenSubject.next('');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('isLoggedIn');
+        this.clearCache();
+        this.userEntityService.clearUserState();
+        this.exerciseEntityService.clearCache();
+        this.trainingEntityService.clearCache();
+        this.challengeEntityService.clearCache();
     }
 
     resetPasswordStep1(document: string): Observable<ForgotPasswordRes> {

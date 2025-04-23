@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FilterComponent } from '../../../shared/components/filter/filter.component';
 import { TrainingEntityService } from '../../../store/training/training-entity.service';
-
+import { User } from '../../../shared/models/users.model';
 @Component({
   selector: 'app-trainings',
   standalone: true,
@@ -18,6 +18,8 @@ export class TrainingsComponent {
   private readonly trainingEntityService = inject(TrainingEntityService);
   trainings$: Observable<Training[]> = this.trainingEntityService.entities$;
   filteredTrainings$: Observable<Training[]> = new Observable<Training[]>;
+
+  currentUser: User = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
 
   constructor() {

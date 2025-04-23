@@ -15,8 +15,10 @@ export interface User {
   points?: number,
   last_login?: string,
   device_token?: string,
+  first_access?: boolean,
   device_os?: string,
   roles: Roles[]
+  formatted_roles?: string
 }
 export interface Roles {
   name: string,

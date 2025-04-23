@@ -13,6 +13,8 @@
         type === 'password' ? (this.showPassword ? 'text' : 'password') : type
       "
       [mask]="mask"
+      [showMaskTyped]="showMaskTyped"
+      [dropSpecialCharacters]="dropSpecialCharacters"
       [name]="label"
       autocomplete="on"
       *ngIf="
@@ -34,6 +36,10 @@
     ></i>
   </div>
 
+  <div class="mt-3" *ngIf="type === 'password' && showPasswordStrength">
+    <app-password-strength [password]="control.value"></app-password-strength>
+  </div>
+
   <select
     class="form-control"
     *ngIf="type == 'combo'"
@@ -45,7 +51,7 @@
     </option>
   </select>
 
-  <p *ngIf="control.errors && control.touched && control.invalid">
-    {{ control.errors | onlyOneError }}
-  </p>
+  <div *ngIf="control.errors && control.touched && control.invalid && !showPasswordStrength">
+    <p class="text-danger mb-0 font-family-league-spartan">{{ control.errors | onlyOneError }}</p>
+  </div>
 </div>

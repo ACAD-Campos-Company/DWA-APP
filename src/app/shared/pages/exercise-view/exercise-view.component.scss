@@ -1,9 +1,11 @@
+.exercise-view-container {
+  height: 100vh;
+}
+
 .view-container {
   padding: 1rem;
   background-color: white;
   border-radius: 1.25rem;
-  height: 90%;
-  overflow-y: auto;
 
   .information-container {
     grid-template-rows: 50px;
@@ -63,10 +65,6 @@
         border-bottom: 2px solid #F5A623;
         color: #F5A623;
         font-weight: 600;
-      }
-      
-      &:hover:not(.active) {
-        border-bottom: 2px solid rgba(245, 166, 35, 0.5);
       }
 
       .series-done-icon {

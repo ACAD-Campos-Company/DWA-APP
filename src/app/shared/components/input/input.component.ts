@@ -3,11 +3,19 @@ import { Component, EventEmitter, Input, Output, AfterContentInit, OnChanges } f
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { OnlyOneErrorPipe } from '../../utils/pipes/only-one-error.pipe';
+import { PasswordStrengthComponent } from '../password-strength/password-strength.component';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, NgxMaskDirective, NgxMaskPipe, OnlyOneErrorPipe],
+  imports: [
+    FormsModule, 
+    ReactiveFormsModule, 
+    CommonModule, 
+    NgxMaskDirective, 
+    OnlyOneErrorPipe,
+    PasswordStrengthComponent
+  ],
   providers: [provideNgxMask()],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss']
@@ -25,6 +33,9 @@ export class InputComponent implements AfterContentInit, OnChanges {
   @Input() inputClass: string = '';
   @Input() labelClass: string = '';
   @Input() borderless: boolean = false;
+  @Input() showPasswordStrength: boolean = false;
+  @Input() showMaskTyped: boolean = false;
+  @Input() dropSpecialCharacters: boolean = true;
 
   @Output() input = new EventEmitter();
 

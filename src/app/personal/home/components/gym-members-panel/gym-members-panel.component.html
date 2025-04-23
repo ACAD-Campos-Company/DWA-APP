@@ -4,6 +4,10 @@
       <i class="fas fa-fire-flame-curved text-danger"></i>
       <h1 class="text-white font-family-poppins m-0 fw-semibold">ALUNOS CADASTRADOS</h1>
     </div>
+    <div class="see-all d-flex align-items-center font-family-poppins fw-semibold" routerLink="/personal/gym-members" *ngIf="(filteredGymMembers$ | async)!.length > 0">
+      <span>Ver todos</span>
+      <i class="fas fa-solid fa-caret-right ms-1"></i>
+    </div>
   </header>
 
   <ng-container *ngIf="(filteredGymMembers$ | async)!.length > 0; else noGymMembers">

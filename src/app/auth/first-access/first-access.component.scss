@@ -14,8 +14,12 @@
     line-height: 24px;
     margin-bottom: 30px;
   }
+}
 
-  #policy-link {
-    font-size: 0.75rem;
+#policy-link {
+  font-size: 0.75rem;
+
+  a {
+    color: #fff;
   }
 }

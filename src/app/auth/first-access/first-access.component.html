@@ -15,7 +15,7 @@
   <div class="d-flex flex-column justify-content-between w-100 h-100">
     <form [formGroup]="firstAccessForm" class="d-flex flex-column gap-3">
       <app-input
-        label="Como quer ser chamado?"
+        label="Como gostaria de  ser chamado?"
         [required]="true"
         placeholder="exemplo: Paulo"
         [control]="$any(firstAccessForm).controls['username']"
@@ -26,7 +26,9 @@
         [required]="true"
         placeholder="(12) 98765-4321"
         mask="(00) 00000-0000"
+        [dropSpecialCharacters]="false"
         [control]="$any(firstAccessForm).controls['telephone']"
+        [showMaskTyped]="true"
       ></app-input>
 
       <app-input
@@ -42,6 +44,7 @@
         placeholder="********"
         [control]="$any(firstAccessForm).controls['password']"
         type="password"
+        [showPasswordStrength]="true"
       ></app-input>
 
       <app-input
@@ -53,7 +56,7 @@
       ></app-input>
 
       <p
-        class="error-message font-family-league-spartan"
+        class="text-danger font-family-league-spartan"
         *ngIf="errorMessage$ | async as error"
       >
         {{ error }}
@@ -63,12 +66,12 @@
         id="policy-link"
       >
         Ao continuar você aceita nosso
-        <a class="text-decoration-underline">Termos de Uso</a> e
-        <a class="text-decoration-underline">Política de Privacidade.</a></span
-      >
+        <a class="text-decoration-underline" (click)="showTermsOfUse()">Termos de Uso</a> e
+        <a class="text-decoration-underline" (click)="showPrivacyPolicy()">Política de Privacidade.</a>
+      </span>
     </form>
     <div class="mt-3">
-      <app-button (clicked)="onSubmit()"></app-button>
+      <app-button (clicked)="onSubmit()" [disabled]="!firstAccessForm.valid"></app-button>
     </div>
   </div>
 </div>

@@ -4,4 +4,6 @@ export interface Notification {
     body: string;
     read: boolean;
     timestamp: number;
-  }
+    type: string;
+    image?: string;
+}

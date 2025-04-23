@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DefaultDataService, HttpUrlGenerator } from '@ngrx/data';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AuthenticateLogin, AuthenticateLoginData, ForgotPasswordRes } from '../../shared/models/authenticate.model';
 
 
@@ -30,11 +30,7 @@ export class AuthDataService extends DefaultDataService<AuthenticateLoginData> {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/auth/logout`, {}).pipe(
-      tap(() => {
-        localStorage.removeItem('token');
-      })
-    );
+    return this.http.post<void>(`${this.baseUrl}/auth/logout`, {});
   }
 
   resetPasswordStep1(document: string): Observable<ForgotPasswordRes> {

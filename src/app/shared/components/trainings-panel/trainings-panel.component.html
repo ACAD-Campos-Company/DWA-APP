@@ -37,7 +37,7 @@
                 )
               : ''
           "
-          imageSrc="assets/images/default-training-profile.png"
+          [imageSrc]="'assets/images/default-training-' + currentUser.gender + '.jpg'"
           size="large"
           [routerLink]="[
             '/general/training',

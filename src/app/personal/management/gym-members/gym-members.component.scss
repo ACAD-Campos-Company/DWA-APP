@@ -5,35 +5,43 @@
     background: $gym-members-list-background;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.6);
+    grid-template-columns: 100px 1fr;
+    cursor: pointer;
+
+    .profile-pic-container {
+      border-radius: 16px 0 0 16px;
+      overflow: hidden;
+    }
 
     .profile-pic {
-      border-bottom-left-radius: 16px;
       object-fit: cover;
     }
 
     .member-details {
+      overflow: hidden;
+
       h2 {
         color: #f5a623;
-        font-size: 18px;
-        margin: 0 0 4px 0;
-      }
+        font-size: 1.125rem;
 
-      .plan {
-        font-size: 14px;
-        margin: 0 0 8px 0;
+        @media (max-width: 576px) {
+          font-size: 1rem;
+        }
       }
 
       .contact-info {
         color: #6c7072;
 
         span {
-          font-size: 12px;
+          font-size: 0.875rem;
 
-          img {
-            width: 16px;
-            height: 16px;
-            filter: brightness(0) saturate(100%) invert(73%) sepia(41%)
-              saturate(1511%) hue-rotate(338deg) brightness(101%) contrast(96%);
+          @media (max-width: 576px) {
+            font-size: 0.75rem;
+          }
+
+          i {
+            color: #f5a623;
+            font-size: 1rem;
           }
         }
       }

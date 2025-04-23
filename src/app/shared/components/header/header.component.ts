@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ChangeDetectorRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ChangeDetectorRef, inject, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { User } from '../../models/users.model';
@@ -12,7 +12,7 @@ import { PushNotificationService } from '../../services/push-notification.servic
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Input() title: string = '';
   @Input() hasHome: boolean = false;
   @Input() routeNameBack: string | null = null;
@@ -27,12 +27,12 @@ export class HeaderComponent {
 
   currentCount: number = 0;
 
-  constructor() {
+  ngOnInit() {
     this.routeName = this.isAdmin ? '/personal/home' : '/members/home';
 
     this.pushNotificationService.unreadCount$.subscribe(count => {
       this.currentCount = count;
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     });
   }
 

@@ -26,12 +26,6 @@
     right: 20px;
   }
 
-  p {
-    color: red;
-    margin-bottom: 0;
-    font-size: 15px;
-  }
-
   .input-container {
     ::ng-deep [icon] {
       position: absolute;
@@ -54,4 +48,8 @@
       box-shadow: none;
     }
   }
+}
+
+p {
+  margin-top: 0.50rem;
 }

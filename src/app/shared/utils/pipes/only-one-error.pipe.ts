@@ -19,15 +19,15 @@ export class OnlyOneErrorPipe implements PipeTransform {
   private getError(errorKey: string): string {
     switch (errorKey) {
       case 'required':
-        return 'Esse campo é obrigatório.';
-      case 'weakPassword':
-        return 'Senha fraca, utilize ao menos uma letra maiuscula e um caracter especial (@, !, #...).';
+        return 'Este campo é obrigatório';
+      case 'email':
+        return 'Formato de e-mail inválido';
+      case 'pattern':
+        return 'Formato inválido';
       case 'passwordMismatch':
-        return 'Senhas não conferem.';
-      case 'mask':
-        return 'Formato inválido'
+        return 'As senhas não correspondem';
       default:
-        return 'Valor inválido.';
+        return 'Valor inválido';
     }
   }
 
