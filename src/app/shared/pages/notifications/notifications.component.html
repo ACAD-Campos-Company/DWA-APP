@@ -38,7 +38,7 @@
         [body]="notification.body"
         [read]="false"
         [imageUrl]="notification.image"
-        [type]="notification.type"
+        [type]="formatNotificationType(notification.type)"
         [timestamp]="notification.timestamp"
         (onClose)="$event.stopPropagation(); markAsRead(notification.id)"
         (click)="handleNotificationClick(notification)"

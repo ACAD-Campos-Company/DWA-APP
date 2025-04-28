@@ -60,6 +60,21 @@ export class NotificationsComponent {
     });
   }
 
+  formatNotificationType(type: string) {
+    switch (type) {
+      case 'Warning':
+        return 'Aviso';
+      case 'Promotion':
+        return 'Promoção';
+      case 'General':
+        return 'Geral';
+      case 'Event':
+        return 'Evento';
+      default:
+        return type;
+    }
+  }
+
   private handleNotificationType(notification: Notification) {
     if (notification.type.toLowerCase() === 'training' || notification.type.toLowerCase() === 'general') {
       return;

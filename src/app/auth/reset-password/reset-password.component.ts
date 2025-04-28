@@ -184,4 +184,8 @@ export class ResetPasswordComponent implements OnInit {
   private formatPhoneNumber(phone: string): string {
     return phone.replace(/(\d{2})(\d{1})\d{4}(\d{4})/, '($1) $2****-$3');
   }
+
+  public clearErrorMessage(): void {
+    this.errorMessageSubject.next(null);
+  }
 }

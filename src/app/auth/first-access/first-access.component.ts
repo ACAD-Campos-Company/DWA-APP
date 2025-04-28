@@ -86,7 +86,7 @@ export class FirstAccessComponent implements OnInit {
 
     const formControls = {
       username: user.username || '',
-      telephone: user.telephone || '',
+      telephone: this.formatPhoneNumber(user.telephone) || '',
       email: user.email || '',
     };
 
@@ -94,11 +94,15 @@ export class FirstAccessComponent implements OnInit {
       const control = this.firstAccessForm.get(key);
       if (control && formControls[key as keyof typeof formControls]) {
         control.setValue(formControls[key as keyof typeof formControls]);
-        if (key !== 'email') { // Email é opcional
+        if (key !== 'email') {
           control.markAsTouched();
         }
       }
     });
+  }
+
+  private formatPhoneNumber(phone: string): string {
+    return phone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
   }
 
   onSubmit(): void {

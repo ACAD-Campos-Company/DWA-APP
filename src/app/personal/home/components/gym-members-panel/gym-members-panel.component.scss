@@ -26,8 +26,13 @@
   }
 
   &__grid {
+    swiper-container {
+      width: 100%;
+    }
+
     swiper-slide {
-      height: auto;
+      width: auto !important;
+      height: auto !important;
       flex-shrink: 0 !important;
       transition: transform 0.2s;
     }

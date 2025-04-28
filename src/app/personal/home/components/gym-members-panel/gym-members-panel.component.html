@@ -13,19 +13,22 @@
   <ng-container *ngIf="(filteredGymMembers$ | async)!.length > 0; else noGymMembers">
     <swiper-container
       class="customers-panel__grid p-0"
-      [config]="swiperConfig"
-      [slidesPerView]="3"
-      [spaceBetween]="90"
-  >
-    <swiper-slide *ngFor="let gymMember of (filteredGymMembers$ | async)!">
-      <app-card
-        [title]="gymMember.username"
-        [subtitle]="gymMember.telephone || 'Não informado'"
-        [showButton]="false"
-        imageSrc="assets/images/default-user-profile.png"
-        size="small"
-        [routerLink]="['/personal/gym-members', gymMember.id]"
-        ></app-card>
+      slides-per-view="auto"
+      space-between="20"
+      scrollbar-draggable="true"
+      scrollbar-hide="false"
+      direction="horizontal"
+      breakpoints='{"320":{"slidesPerView":"auto","spaceBetween":10},"640":{"slidesPerView":"auto","spaceBetween":15},"1024":{"slidesPerView":"auto","spaceBetween":20}}'
+    >
+      <swiper-slide *ngFor="let gymMember of (filteredGymMembers$ | async)!">
+        <app-card
+          [title]="gymMember.username"
+          [subtitle]="gymMember.telephone || 'Não informado'"
+          [showButton]="false"
+          imageSrc="assets/images/default-user-profile.png"
+          size="small"
+          [routerLink]="['/personal/gym-members', gymMember.id]"
+          ></app-card>
       </swiper-slide>
     </swiper-container>
   </ng-container>
