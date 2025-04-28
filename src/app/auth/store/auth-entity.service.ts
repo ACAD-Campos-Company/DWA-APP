@@ -97,9 +97,7 @@ export class AuthEntityService extends EntityCollectionServiceBase<AuthState> {
     }
 
     logout(): Observable<void> {
-        return this.authDataService.logout().pipe(
-            finalize(() => this.clearAuthData())
-        );
+        return this.authDataService.logout();
     }
 
     clearAuthData(): void {

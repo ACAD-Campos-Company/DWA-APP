@@ -19,8 +19,15 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned).pipe(
       catchError(error => {
         if (error.status === 401 && error.error.message === 'Usuário não autenticado.') {
-          authEntityService.logout();
-          router.navigate(['/login']);
+          authEntityService.logout().subscribe({
+            error: () => {
+              authEntityService.clearAuthData();
+              router.navigate(['/login']);
+            },
+            complete: () => {
+              router.navigate(['/login']);
+            }
+          });
         }
         return throwError(() => error);
       })
