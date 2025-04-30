@@ -32,7 +32,6 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
 
   getChallengeById(id: number): Observable<Challenge | undefined> {
     this.challengeDataService.getChallengeById(id).subscribe(challenge => {
-      console.log(challenge);
       this.challengeByIdSubject.next(challenge);
     });
 
@@ -52,16 +51,16 @@ export class ChallengeEntityService extends EntityCollectionServiceBase<Challeng
     return this.challengeDataService.completeChallenge(payload).pipe(
       tap((response: Challenge) => {
         const update = { id: response.challenge_id, changes: response };
-
         super.updateOneInCache(update);
+
         const currentChallenges = this.challengesSubject.getValue();
-        if (currentChallenges.some(ch => ch.id === response.challenge_id)) {
-          this.challengesSubject.next(
-            currentChallenges.map(ch =>
-              ch.id === response.challenge_id ? response : ch
-            )
-          );
-        }
+        const updatedChallenges = currentChallenges.map(ch =>
+          ch.id === response.challenge_id ? { ...ch, completed: true } : ch
+        );
+        
+        this.challengesSubject.next(updatedChallenges);
+        
+        this.getTodayChallenges();
       })
     );
   }

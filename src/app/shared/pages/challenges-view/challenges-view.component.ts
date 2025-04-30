@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 export class ChallengesViewComponent implements OnInit {
 
   private readonly challengesService = inject(ChallengeEntityService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   challenges$: Observable<Challenge[]> = new Observable();
   completedChallenges$: Observable<Challenge[]> = new Observable();
@@ -45,6 +46,7 @@ export class ChallengesViewComponent implements OnInit {
   public completeChallenge(challengeId: number): void {
     this.challengesService.completeChallenge({ challenge_id: challengeId, user_id: this.userID }).pipe(
       tap(() => {
+        this.cdr.detectChanges();
         Swal.fire({
           title: 'Parabéns!',
           text: 'Desafio concluído com sucesso, continue assim!',
