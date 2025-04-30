@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { tap, filter, first, map } from 'rxjs/operators';
 import { ChallengeEntityService } from './challenge-entity.service';
 import { UserEntityService } from '../user/user-entity.service';
-import { ActivatedRoute } from '@angular/router';
 
 export const challengeResolver: ResolveFn<boolean> = (route) => {
   const challengeEntityService = inject(ChallengeEntityService);

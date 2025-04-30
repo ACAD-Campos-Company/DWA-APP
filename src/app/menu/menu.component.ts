@@ -28,15 +28,11 @@ export class MenuComponent {
   currentUser$: Observable<User> = this.userEntityService.currentUser$;
 
   logout(): void {
-    const logout$ = this.authEntityService.logout()
-      .pipe(finalize(() => {
-        this.router.navigate(['/login']);
-      }))
-      
-
-    this.loadingService.showLoaderUntilCompleted(logout$).subscribe({
+    this.authEntityService.logout().subscribe({
       error: (error) => {
         console.error('Erro ao fazer logout:', error);
+      },
+      complete: () => {
         this.authEntityService.clearAuthData();
         this.router.navigate(['/login']);
       }

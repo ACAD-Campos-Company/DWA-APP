@@ -16,7 +16,7 @@ export class UserDataService extends DefaultDataService<User> {
   }
 
   override getAll(): Observable<User[]> {
-    return this.http.get<UserData>(this.baseUrl).pipe(
+    return this.http.get<UserData>(`${this.baseUrl}?paginate=false`).pipe(
       map(response => response.data.users)
     );
   }
